@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C7FD6E93-7175-437A-8B02-834953A0BE5D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DsiNext.DeliveryEngine.Repositories.Data.Oracle</RootNamespace>
+    <AssemblyName>DsiNext.DeliveryEngine.Repositories.Data.Oracle</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Oracle.DataAccess, Version=4.112.3.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External references\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\CloneOracleDataRepositoryEventArgs.cs" />
+    <Compile Include="Events\HandleOracleDataEventArgs.cs" />
+    <Compile Include="IOracleClient.cs" />
+    <Compile Include="IOracleClientFactory.cs" />
+    <Compile Include="OracleClient.cs" />
+    <Compile Include="OracleClientFactory.cs" />
+    <Compile Include="OracleDataRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Domain.Interfaces\DsiNext.DeliveryEngine.Domain.Interfaces.csproj">
+      <Project>{3D311AFE-B790-4B64-85E0-C70E4BDB2820}</Project>
+      <Name>DsiNext.DeliveryEngine.Domain.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Domain\DsiNext.DeliveryEngine.Domain.csproj">
+      <Project>{F0C4EA48-66A5-465D-97BB-B11513EED60A}</Project>
+      <Name>DsiNext.DeliveryEngine.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Infrastructure.Interfaces\DsiNext.DeliveryEngine.Infrastructure.Interfaces.csproj">
+      <Project>{5798D502-69D9-45C6-BE40-F05A6E4E33AD}</Project>
+      <Name>DsiNext.DeliveryEngine.Infrastructure.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Interfaces\DsiNext.DeliveryEngine.Repositories.Interfaces.csproj">
+      <Project>{0C5A0EBC-63CF-4328-BE83-C89351CB97CD}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Resources\DsiNext.DeliveryEngine.Resources.csproj">
+      <Project>{3F4027A3-4555-4E73-9C43-4F96E78A8B38}</Project>
+      <Name>DsiNext.DeliveryEngine.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

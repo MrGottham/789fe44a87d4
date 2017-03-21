@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.ICandidateKey">
+    <Position X="12.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\ICandidateKey.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.ITable">
+    <Position X="12" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgECAAAkAgAAAACAAAIAAAAAAAAAAAACABAAEgAAhAA=</HashCode>
+      <FileName>Metadata\ITable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.ICriteria">
+    <Position X="5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\ICriteria.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IDataSource">
+    <Position X="9.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QwAAgIAAAAkhAWgIKAgYRABAgCAADCAwESYXEAABAAg=</HashCode>
+      <FileName>Metadata\IDataSource.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IDocument">
+    <Position X="16.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IDocument.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IDynamicMap&lt;TSource, TTarget&gt;">
+    <Position X="16" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Metadata\IDynamicMap.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IField">
+    <Position X="14" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAABAAAEAAAIIAQAAAAAAAAIBAAAAEAAAAAAA=</HashCode>
+      <FileName>Metadata\IField.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IFilter">
+    <Position X="7.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IFilter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IForeignKey">
+    <Position X="15.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IForeignKey.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IIntervalCriteria">
+    <Position X="4.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IIntervalCriteria.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IKey">
+    <Position X="14" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Metadata\IKey.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IMap">
+    <Position X="17.5" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Metadata\IMap.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IMetadataObjectBase">
+    <Position X="12" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IMetadataObjectBase.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.INamedObject">
+    <Position X="11.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAgAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\INamedObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IStaticMap&lt;TSource, TTarget&gt;">
+    <Position X="18.75" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Metadata\IStaticMap.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IEqualCriteria">
+    <Position X="6.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IEqualCriteria.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DsiNext.DeliveryEngine.Domain.Interfaces.Metadata.IPoolCriteria">
+    <Position X="3" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IPoolCriteria.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

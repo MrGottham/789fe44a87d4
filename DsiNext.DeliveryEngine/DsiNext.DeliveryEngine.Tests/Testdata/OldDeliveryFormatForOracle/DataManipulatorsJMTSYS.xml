@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataManipulators xmlns="urn:dsinext:deliveryengine:repositories:datamanipulators:1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- Finder manglende relationer mellem LinkIdent og AdrIdent på Adresse:
+  SELECT COUNT(*) FROM ADRESSE A, ADRESSE L WHERE A.LINKIDENT IS NOT NULL AND A.LINKIDENT<>0 AND A.LINKIDENT=L.ADRIDENT(+) AND L.ADRIDENT IS NULL ORDER BY L.ADRIDENT
+  -->
+  <!-- Finder manglende relationer mellem AdrIdent og AdrIdent på Kaulink: 
+  SELECT K.ADRIDENT,K.K_IDENT,K.EMBEDE,K.SYSTEM_NR,A.ADRIDENT FROM KAULINK K, ADRESSE A WHERE K.ADRIDENT=A.ADRIDENT(+) AND A.ADRIDENT IS NULL
+  -->
+  <!-- Finder manglende relationer mellem sagsunderparter og sagsparter.
+  SELECT S.SYSTEM_NR,S.SAGSTYPE,S.LINKTYPE,S.SAGSPART,S.PARTTYPE,S.BETEGN,P.LINKTYPE,P.SAGSPART,P.PARTTYPE FROM SAGSPART S, SAGSPART P WHERE S.LINKTYPE>0 AND P.SYSTEM_NR(+)=S.SYSTEM_NR AND P.SAGSTYPE(+)=S.SAGSTYPE AND P.LINKTYPE(+)=0 AND P.PARTTYPE(+)=S.LINKTYPE AND P.PARTTYPE IS NULL ORDER BY S.SYSTEM_NR,S.SAGSTYPE,S.LINKTYPE,S.SAGSPART
+  DELETE FROM SAGSPART WHERE ROWIDTOCHAR(ROWID) IN (SELECT ROWIDTOCHAR(S.ROWID) FROM SAGSPART S, SAGSPART P WHERE S.LINKTYPE>0 AND P.SYSTEM_NR(+)=S.SYSTEM_NR AND P.SAGSTYPE(+)=S.SAGSTYPE AND P.LINKTYPE(+)=0 AND P.PARTTYPE(+)=S.LINKTYPE AND P.PARTTYPE IS NULL)
+  -->
+  <!-- Finder sager, hvor sagstype ikke eksisterer
+  SELECT S.SYSTEM_NR,S.SAGSTYPE,COUNT(*) FROM SAGLISTE S, SAGSTYPE ST WHERE S.SYSTEM_NR IN (1,2,4,5,8,24) AND ST.SYSTEM_NR(+)=S.SYSTEM_NR AND ST.SAGSTYPE(+)=S.SAGSTYPE AND ST.SAGSTYPE IS NULL GROUP BY S.SYSTEM_NR,S.SAGSTYPE ORDER BY S.SYSTEM_NR,S.SAGSTYPE
+  -->
+  <!--  Finder manglende relatioenr mellem sagstypeafgørelser og sagstyper.
+  SELECT SS.SYSTEM_NR,SS.SAGSTYPE FROM SAGSSTAT SS, SAGSTYPE ST WHERE SS.SYSTEM_NR IN (1,2,4,5,8,24) AND SS.TABEL=61 AND ST.SYSTEM_NR(+)=SS.SYSTEM_NR AND ST.SAGSTYPE(+)=SS.SAGSTYPE AND ST.SAGSTYPE IS NULL ORDER BY SS.SYSTEM_NR,SS.SAGSTYPE
+  DELETE FROM SAGSSTAT WHERE ROWIDTOCHAR(ROWID) IN (SELECT ROWIDTOCHAR(SS.ROWID) FROM SAGSSTAT SS, SAGSTYPE ST WHERE SS.SYSTEM_NR IN (1,2,4,5,8,24) AND SS.TABEL=61 AND ST.SYSTEM_NR(+)=SS.SYSTEM_NR AND ST.SAGSTYPE(+)=SS.SAGSTYPE AND ST.SAGSTYPE IS NULL)
+  -->
+
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <EqualCriteria field="Adrtype" value="54"/>
+    <Field name="Adrtype" value="4"/>
+  </DataSetter>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <PoolCriteria field="Adrtype" values="2,4,5,20,21,22,23,24"/>
+    <Field name="System_Nr" value="1"/>
+  </DataSetter>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <PoolCriteria field="Adrtype" values="11,18,99"/>
+    <Field name="System_Nr" value="4"/>
+  </DataSetter>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="System_Nr" value="8"/>
+    <PoolCriteria field="Adrtype" values="82,91"/>
+    <Field name="Adrtype" value="1"/>
+  </DataSetter>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="Adv_Retshj" value="j"/>
+    <Field name="Adv_Retshj" value="J"/>
+  </DataSetter>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="Adv_Retshj" value="n"/>
+    <Field name="Adv_Retshj" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="ADRESSE">
+    <Field name="Adv_Retshj" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="ADRESSE">
+    <PoolCriteria field="Adv_Beni" values="B,b,j"/>
+    <Field name="Adv_Beni" value="J"/>
+  </DataSetter>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="Adv_Beni" value="n"/>
+    <Field name="Adv_Beni" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="ADRESSE">
+    <Field name="Adv_Beni" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="Hurtig_Udryk" value="j"/>
+    <Field name="Hurtig_Udryk" value="J"/>
+  </DataSetter>
+  <DataSetter table="ADRESSE">
+    <EqualCriteria field="Hurtig_Udryk" value="n"/>
+    <Field name="Hurtig_Udryk" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="ADRESSE">
+    <Field name="Hurtig_Udryk" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <MissingForeignKeyHandler table="ADRESSE">
+    <PrimaryKeyAdder targetTable="SAGLISTE">
+      <ForeignKey field="Ld_Ident1"/>
+      <SetValue field="System_Nr" value="1"/>
+      <SetValue field="Adrtype" value="7"/>
+      <SetValue field="Efternavn" value="(Slettet lægdommer)"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+  <MissingForeignKeyHandler table="ADRESSE">
+    <PrimaryKeyAdder targetTable="SAGLISTE">
+      <ForeignKey field="Ld_Ident2"/>
+      <SetValue field="System_Nr" value="1"/>
+      <SetValue field="Adrtype" value="8"/>
+      <SetValue field="Efternavn" value="(Slettet lægdommer)"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+  <MissingForeignKeyHandler table="ADRESSE">
+    <PrimaryKeyAdder targetTable="PARTER">
+      <ForeignKey field="Amt_Ident"/>
+      <SetValue field="System_Nr" value="1"/>
+      <SetValue field="Adrtype" value="5"/>
+      <SetValue field="Efternavn" value="(Slettet statsamt)"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+
+  <DataSetter table="SAGSPART">
+    <EqualCriteria field="LinkType" value="0"/>
+    <Field name="UParttype" value="0"/>
+  </DataSetter>
+  <DataSetter table="SAGSPART">
+    <IntervalCriteria field="LinkType" fromValue="1" toValue="99"/>
+    <Field name="ParttypeNr" value="0"/>
+  </DataSetter>
+  <MissingForeignKeyHandler table="STAFGTYP">
+    <PrimaryKeyAdder targetTable="SAGLISTE">
+      <ForeignKey field="System_Nr"/>
+      <ForeignKey field="Sagstype"/>
+      <ForeignKey field="Afgørelse"/>
+      <SetValue field="Tabel" value="61"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+  <MissingForeignKeyHandler table="STAFGTYP">
+    <ForeignKeyDeleter targetTable="SAGSTYPE">
+      <ForeignKey field="System_Nr"/>
+      <ForeignKey field="Sagstype"/>
+    </ForeignKeyDeleter>
+  </MissingForeignKeyHandler>
+  <MissingForeignKeyHandler table="AFGSPEC">
+    <PrimaryKeyAdder targetTable="SAGLISTE">
+      <ForeignKey field="System_Nr"/>
+      <ForeignKey field="Sagstype"/>
+      <ForeignKey field="AfgørSpec"/>
+      <SetValue field="Tabel" value="64"/>
+      <SetValue field="Tekst" value="(Slettet eller ukendt afgørelsesspecifikation)"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="1"/>
+    <EqualCriteria field="Tabel" value="12"/>
+    <Field name="System_Nr" value="2"/>
+  </RowDuplicator>
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="1"/>
+    <EqualCriteria field="Tabel" value="12"/>
+    <Field name="System_Nr" value="5"/>
+  </RowDuplicator>
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="1"/>
+    <EqualCriteria field="Tabel" value="13"/>
+    <Field name="System_Nr" value="2"/>
+  </RowDuplicator>
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="1"/>
+    <EqualCriteria field="Tabel" value="13"/>
+    <Field name="System_Nr" value="5"/>
+  </RowDuplicator>
+  <DataSetter table="TABEL">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <EqualCriteria field="Tabel" value="26"/>
+    <Field name="System_Nr" value="4"/>
+  </DataSetter>
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="2"/>
+    <EqualCriteria field="Tabel" value="26"/>
+    <Field name="System_Nr" value="5"/>
+  </RowDuplicator>
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="4"/>
+    <EqualCriteria field="Tabel" value="26"/>
+    <Field name="System_Nr" value="24"/>
+  </RowDuplicator>
+  <DataSetter table="TABEL">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <EqualCriteria field="Tabel" value="66"/>
+    <Field name="System_Nr" value="2"/>
+  </DataSetter>
+  <DataSetter table="TABEL">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <EqualCriteria field="Tabel" value="68"/>
+    <Field name="System_Nr" value="2"/>
+  </DataSetter>
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="2"/>
+    <EqualCriteria field="Tabel" value="68"/>
+    <Field name="System_Nr" value="5"/>
+  </RowDuplicator>
+  <DataSetter table="TABEL">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <EqualCriteria field="Tabel" value="69"/>
+    <Field name="System_Nr" value="2"/>
+  </DataSetter>
+  <RowDuplicator table="TABEL">
+    <EqualCriteria field="System_Nr" value="2"/>
+    <EqualCriteria field="Tabel" value="69"/>
+    <Field name="System_Nr" value="5"/>
+  </RowDuplicator>
+  <DataSetter table="TABEL">
+    <EqualCriteria field="System_Nr" value="0"/>
+    <EqualCriteria field="Tabel" value="70"/>
+    <Field name="System_Nr" value="2"/>
+  </DataSetter>
+  <MissingForeignKeyHandler table="STATUS">
+    <PrimaryKeyAdder targetTable="BETALT">
+      <ForeignKey field="System_Nr"/>
+      <ForeignKey field="Status"/>
+      <SetValue field="Tabel" value="2"/>
+      <SetValue field="Tekst" value="(Slettet betalingsstatus)"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+  <MissingForeignKeyHandler table="AFDELING">
+    <PrimaryKeyAdder targetTable="SAGLISTE">
+      <ForeignKey field="Afdeling"/>
+      <SetValue field="System_Nr" value="0"/>
+      <SetValue field="Tabel" value="7"/>
+      <SetValue field="Tekst" value="(Slettet afdeling)"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+
+  <MissingForeignKeyHandler table="B_SYSTEM">
+    <PrimaryKeyAdder targetTable="BERAMME">
+      <ForeignKey field="Embede"/>
+      <ForeignKey field="System_Nr"/>
+      <ForeignKey field="Sektion"/>
+      <ForeignKey field="Beram_Hos"/>
+      <SetValue field="Bruger_Type" value="01"/>
+    </PrimaryKeyAdder>
+  </MissingForeignKeyHandler>
+
+  <DataSetter table="KAUTION">
+    <EqualCriteria field="System_Nr" value="74"/>
+    <Field name="System_Nr" value="24"/>
+  </DataSetter>
+  <DataSetter table="KAULINK">
+    <EqualCriteria field="System_Nr" value="74"/>
+    <Field name="System_Nr" value="24"/>
+  </DataSetter>
+
+  <DataSetter table="SAGLISTE">
+    <EqualCriteria field="System_Nr" value="2"/>
+    <PoolCriteria field="Sagstype" values="0101"/>
+    <Field name="Sagstype" value="010101"/>
+  </DataSetter>
+  <DataSetter table="SAGLISTE">
+    <EqualCriteria field="System_Nr" value="2"/>
+    <PoolCriteria field="Sagstype" values="¨04"/>
+    <Field name="Sagstype" value="010104"/>
+  </DataSetter>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="AfgørelsesType" value="a"/>
+    <Field name="AfgørelsesType" value="A"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="AfgørelsesType" regularExpression="^[123456789Aa]$" applyOn="ApplyOnUnmatch" value="{null}"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Genstand_Konf" value="j"/>
+    <Field name="Genstand_Konf" value="J"/>
+  </DataSetter>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Genstand_Konf" value="n"/>
+    <Field name="Genstand_Konf" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="Genstand_Konf" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Erstatning" value="j"/>
+    <Field name="Erstatning" value="J"/>
+  </DataSetter>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Erstatning" value="n"/>
+    <Field name="Erstatning" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="Erstatning" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="Tvangs_Kode" regularExpression="^[.1234]$" applyOn="ApplyOnUnmatch" value="."/>
+  </RegularExpressionReplacer>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Vold_FriStraf" value="j"/>
+    <Field name="Vold_FriStraf" value="J"/>
+  </DataSetter>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Vold_FriStraf" value="n"/>
+    <Field name="Vold_FriStraf" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="Vold_FriStraf" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Tolk_JN" value="j"/>
+    <Field name="Tolk_JN" value="J"/>
+  </DataSetter>
+  <DataSetter table="AFGOER">
+    <EqualCriteria field="Tolk_JN" value="n"/>
+    <Field name="Tolk_JN" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="Tolk_JN" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="SUPPLDOM" regularExpression="^[01]$" applyOn="ApplyOnUnmatch" value="0"/>
+  </RegularExpressionReplacer>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="UAFBØDE" regularExpression="^[01]$" applyOn="ApplyOnUnmatch" value="0"/>
+  </RegularExpressionReplacer>
+  <RegularExpressionReplacer table="AFGOER">
+    <Field name="UAFANDET" regularExpression="^[01]$" applyOn="ApplyOnUnmatch" value="0"/>
+  </RegularExpressionReplacer>
+  <MissingForeignKeyHandler table="BERAMME">
+    <ForeignKeyDeleter targetTable="SAGSGANG">
+      <ForeignKey field="Sagsident"/>
+      <ForeignKey field="R_Løbenr"/>
+    </ForeignKeyDeleter>
+  </MissingForeignKeyHandler>
+  <RegularExpressionReplacer table="BETALT">
+    <Field name="BetalingsKode" regularExpression="^[12345]$" applyOn="ApplyOnUnmatch" value="{null}"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="BETALT">
+    <EqualCriteria field="Adv_Rolle" value="a"/>
+    <Field name="Adv_Rolle" value="A"/>
+  </DataSetter>
+  <DataSetter table="BETALT">
+    <EqualCriteria field="Adv_Rolle" value="b"/>
+    <Field name="Adv_Rolle" value="B"/>
+  </DataSetter>
+  <DataSetter table="BETALT">
+    <EqualCriteria field="Adv_Rolle" value="f"/>
+    <Field name="Adv_Rolle" value="F"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="BETALT">
+    <Field name="Adv_Rolle" regularExpression="^[.AaBbFf]$" applyOn="ApplyOnUnmatch" value="{null}"/>
+  </RegularExpressionReplacer>
+  <RegularExpressionReplacer table="BETALT">
+    <Field name="SalærUdredelse" regularExpression="^[.123]$" applyOn="ApplyOnUnmatch" value="{null}"/>
+  </RegularExpressionReplacer>
+  <RegularExpressionReplacer table="BETALT">
+    <Field name="SalærBetaler" regularExpression="^[.12345]$" applyOn="ApplyOnUnmatch" value="{null}"/>
+  </RegularExpressionReplacer>
+  <MissingForeignKeyHandler table="BETALT">
+    <ForeignKeyDeleter targetTable="SAGSGANG">
+      <ForeignKey field="Sagsident"/>
+      <ForeignKey field="R_Løbenr"/>
+    </ForeignKeyDeleter>
+  </MissingForeignKeyHandler>
+  <RegularExpressionReplacer table="BREVE">
+    <Field name="Genpart" regularExpression="^[01]$" applyOn="ApplyOnUnmatch" value="0"/>
+  </RegularExpressionReplacer>
+  <MissingForeignKeyHandler table="BREVE">
+    <ForeignKeyDeleter targetTable="SAGSGANG">
+      <ForeignKey field="Sagsident"/>
+      <ForeignKey field="R_Løbenr"/>
+    </ForeignKeyDeleter>
+  </MissingForeignKeyHandler>
+  <MissingForeignKeyHandler table="FREMLAGT">
+    <ForeignKeyDeleter targetTable="SAGSGANG">
+      <ForeignKey field="Sagsident"/>
+      <ForeignKey field="R_Løbenr"/>
+    </ForeignKeyDeleter>
+  </MissingForeignKeyHandler>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Brev" value="r"/>
+    <Field name="Brev" value="R"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="PARTER">
+    <Field name="Brev" regularExpression="^[Rr]$" applyOn="ApplyOnUnmatch" value="{null}"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="ArrestantSag" value="j"/>
+    <Field name="ArrestantSag" value="J"/>
+  </DataSetter>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="ArrestantSag" value="n"/>
+    <Field name="ArrestantSag" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="PARTER">
+    <Field name="ArrestantSag" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Verserende" value="j"/>
+    <Field name="Verserende" value="J"/>
+  </DataSetter>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Verserende" value="n"/>
+    <Field name="Verserende" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="PARTER">
+    <Field name="Verserende" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Voldssag" value="j"/>
+    <Field name="Voldssag" value="J"/>
+  </DataSetter>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Voldssag" value="n"/>
+    <Field name="Voldssag" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="PARTER">
+    <Field name="Voldssag" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Sigtet" value="j"/>
+    <Field name="Sigtet" value="J"/>
+  </DataSetter>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Sigtet" value="n"/>
+    <Field name="Sigtet" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="PARTER">
+    <Field name="Sigtet" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Voldtægtssag" value="j"/>
+    <Field name="Voldtægtssag" value="J"/>
+  </DataSetter>
+  <DataSetter table="PARTER">
+    <EqualCriteria field="Voldtægtssag" value="n"/>
+    <Field name="Voldtægtssag" value="N"/>
+  </DataSetter>
+  <RegularExpressionReplacer table="PARTER">
+    <Field name="Voldtægtssag" regularExpression="^[JjNn]$" applyOn="ApplyOnUnmatch" value="N"/>
+  </RegularExpressionReplacer>
+  <MissingForeignKeyHandler table="PARTER">
+    <ForeignKeyDeleter targetTable="SAGLISTE">
+      <ForeignKey field="Sagsident"/>
+    </ForeignKeyDeleter>
+  </MissingForeignKeyHandler>
+</DataManipulators>

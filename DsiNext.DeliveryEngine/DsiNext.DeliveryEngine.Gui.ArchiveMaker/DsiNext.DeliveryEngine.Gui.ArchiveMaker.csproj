@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{219D441A-D250-4DB8-ACF6-CF1EAB7343AD}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DsiNext.DeliveryEngine.Gui.ArchiveMaker</RootNamespace>
+    <AssemblyName>DsiNext.DeliveryEngine.Gui.ArchiveMaker</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Domstolene.JFS.CommonLibrary.IoC">
+      <HintPath>..\External references\Domstolene.JFS.CommonLibrary.IoC.dll</HintPath>
+    </Reference>
+    <Reference Include="Domstolene.JFS.CommonLibrary.IoC.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External references\Domstolene.JFS.CommonLibrary.IoC.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.BusinessLogic.Interfaces\DsiNext.DeliveryEngine.BusinessLogic.Interfaces.csproj">
+      <Project>{E097167A-4C04-4B29-83DC-A341A9C1DD6C}</Project>
+      <Name>DsiNext.DeliveryEngine.BusinessLogic.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.BusinessLogic\DsiNext.DeliveryEngine.BusinessLogic.csproj">
+      <Project>{D5EB098B-F440-4832-8137-67F315ACF2D4}</Project>
+      <Name>DsiNext.DeliveryEngine.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Domain.Interfaces\DsiNext.DeliveryEngine.Domain.Interfaces.csproj">
+      <Project>{3D311AFE-B790-4B64-85E0-C70E4BDB2820}</Project>
+      <Name>DsiNext.DeliveryEngine.Domain.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Infrastructure.Interfaces\DsiNext.DeliveryEngine.Infrastructure.Interfaces.csproj">
+      <Project>{5798D502-69D9-45C6-BE40-F05A6E4E33AD}</Project>
+      <Name>DsiNext.DeliveryEngine.Infrastructure.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Infrastructure\DsiNext.DeliveryEngine.Infrastructure.csproj">
+      <Project>{19B5EE12-2F0C-4AAD-AAB2-C6D21C927FF0}</Project>
+      <Name>DsiNext.DeliveryEngine.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Resources\DsiNext.DeliveryEngine.Resources.csproj">
+      <Project>{3F4027A3-4555-4E73-9C43-4F96E78A8B38}</Project>
+      <Name>DsiNext.DeliveryEngine.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

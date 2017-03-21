@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5798D502-69D9-45C6-BE40-F05A6E4E33AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DsiNext.DeliveryEngine.Infrastructure.Interfaces</RootNamespace>
+    <AssemblyName>DsiNext.DeliveryEngine.Infrastructure.Interfaces</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Domstolene.JFS.CommonLibrary.IoC.Interfaces">
+      <HintPath>..\External references\Domstolene.JFS.CommonLibrary.IoC.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\EventHandlers.cs" />
+    <Compile Include="Events\IDeliveryEngineEventArgs.cs" />
+    <Compile Include="ExceptionHandling\IExceptionHandler.cs" />
+    <Compile Include="ExceptionHandling\IExceptionLogger.cs" />
+    <Compile Include="ExceptionHandling\IHandleExceptionEventArgs.cs" />
+    <Compile Include="Exceptions\DeliveryEngineAlreadyHandledException.cs" />
+    <Compile Include="Exceptions\DeliveryEngineBusinessException.cs" />
+    <Compile Include="Exceptions\DeliveryEngineConvertException.cs" />
+    <Compile Include="Exceptions\DeliveryEngineExceptionBase.cs" />
+    <Compile Include="Exceptions\DeliveryEngineMappingException.cs" />
+    <Compile Include="Exceptions\DeliveryEngineMetadataException.cs" />
+    <Compile Include="Exceptions\DeliveryEngineRepositoryException.cs" />
+    <Compile Include="Exceptions\DeliveryEngineSystemException.cs" />
+    <Compile Include="Exceptions\DeliveryEngineValidateException.cs" />
+    <Compile Include="Exceptions\IDeliveryEngineConvertExceptionInfo.cs" />
+    <Compile Include="Exceptions\IDeliveryEngineExceptionInfo.cs" />
+    <Compile Include="Exceptions\IDeliveryEngineMappingExceptionInfo.cs" />
+    <Compile Include="Exceptions\IDeliveryEngineMetadataExceptionInfo.cs" />
+    <Compile Include="Exceptions\IDeliveryEngineValidateExceptionInfo.cs" />
+    <Compile Include="IoC\IArchiveVersionRepositoryConfigurationProvider.cs" />
+    <Compile Include="IoC\IBusinessLogicConfigurationProvider.cs" />
+    <Compile Include="IoC\IConfigurationRepositoryConfigurationProvider.cs" />
+    <Compile Include="IoC\IDataValidatorsConfigurationProvider.cs" />
+    <Compile Include="IoC\IExceptionHandlingConfigurationProvider.cs" />
+    <Compile Include="IoC\IExceptionLoggerConfigurationProvider.cs" />
+    <Compile Include="IoC\IForeignKeysDataValidatorConfigurationProvider.cs" />
+    <Compile Include="IoC\IInformationLoggerConfigurationProvider.cs" />
+    <Compile Include="IoC\IMappingDataValidatorConfigurationProvider.cs" />
+    <Compile Include="IoC\IOldToNewDataRepositoryConfigurationProvider.cs" />
+    <Compile Include="IoC\IOldToNewDocumentRepositoryConfigurationProvider.cs" />
+    <Compile Include="IoC\IOldToNewMetadataRepositoryConfigurationProvider.cs" />
+    <Compile Include="IoC\IOracleDataRepositoryConfigurationProvider.cs" />
+    <Compile Include="IoC\IPrimaryKeyDataValidatorConfigurationProvider.cs" />
+    <Compile Include="Log\IInformationLogger.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

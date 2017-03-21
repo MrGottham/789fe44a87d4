@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArchiveMaker" xml:space="preserve">
+    <value>ArchiveMaker</value>
+  </data>
+  <data name="Assembly" xml:space="preserve">
+    <value>Assembly</value>
+  </data>
+  <data name="BeforeArchiveDataForTargetTableInformation" xml:space="preserve">
+    <value>Writes data in data block number {0} ({1} rows) from table: {2}. Please wait...</value>
+    <comment>{0} =Data block number, {1} Rows in data block, {2} = Name of table.</comment>
+  </data>
+  <data name="BeforeArchiveMetadataInformation" xml:space="preserve">
+    <value>Writes the metadata for {0}. Please wait...</value>
+    <comment>{0} = Archive information package ID.</comment>
+  </data>
+  <data name="BeforeGetDataForTargetTableInformation" xml:space="preserve">
+    <value>Gets data in data block number {0} for table: {1}. Please wait...</value>
+    <comment>{0} = Data block number, {1} = Name of table.</comment>
+  </data>
+  <data name="BeforeGetDataSourceInformation" xml:space="preserve">
+    <value>Gets the data source and metadata. Please wait...</value>
+  </data>
+  <data name="BeforeValidateDataInTargetTableInformation" xml:space="preserve">
+    <value>Validates data in data block number {0} ({1} rows) from table: {2}. Please wait...</value>
+    <comment>{0} =Data block number, {1} Rows in data block, {2} = Name of table.</comment>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Error: {0}</value>
+    <comment>{0} = Error message.</comment>
+  </data>
+  <data name="ForeignKeyCleanerInformation" xml:space="preserve">
+    <value>'{0}' has cleaned {1} rows for missing foreign key values on the table '{2}' throug the foreign key '{3}'.</value>
+    <comment>{0} = Class name, {1} = Number of rows, {2} = Name of table, {3} = Information of foreign key.</comment>
+  </data>
+  <data name="ForeignKeyDeleterInformation" xml:space="preserve">
+    <value>'{0}' has deleted {1} rows for missing foreign key values on the table '{2}' throug the foreign key '{3}'.</value>
+    <comment>{0} = Class name, {1} = Number of rows, {2} = Name of table, {3} = Information of foreign key.</comment>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="PrimaryKeyAdderInformation" xml:space="preserve">
+    <value>'{0}' has added {1} rows as missing primary values on the table '{2}' through the foreign key '{3}'.</value>
+    <comment>{0} = Class name, {1} = Number of rows, {2} = Name of table, {3} = Information of foreign key.</comment>
+  </data>
+  <data name="Thread" xml:space="preserve">
+    <value>Thread</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="UsageArchiveMaker" xml:space="preserve">
+    <value>Usage: {0} [/ArchiveInformationPackageID:[ID]] [/ValidationOnly:[true | false]] [/TablesHandledSimultaneity:[Number]] [/AcceptWarnings:[Number]] [/RemoveMissingRelationshipsOnForeignKeys:[true | false]] [/NumberOfForeignTablesToCache:[Number]]</value>
+    <comment>{0} = Name of program.</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+</root>

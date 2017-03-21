@@ -1,0 +1,623 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{085B4022-0CA2-4065-990D-B6C7BF3A7D1D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DsiNext.DeliveryEngine.Tests</RootNamespace>
+    <AssemblyName>DsiNext.DeliveryEngine.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External references\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External references\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Domstolene.JFS.CommonLibrary.IoC">
+      <HintPath>..\External references\Domstolene.JFS.CommonLibrary.IoC.dll</HintPath>
+    </Reference>
+    <Reference Include="Domstolene.JFS.CommonLibrary.IoC.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External references\Domstolene.JFS.CommonLibrary.IoC.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\External references\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\External references\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\External references\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Integrationtests\BusinessLogic\DataValidatorsTests.cs" />
+    <Compile Include="Integrationtests\BusinessLogic\DeliveryEngineTests.cs" />
+    <Compile Include="Integrationtests\BusinessLogic\DeliveryEngineWithOracleDataRepositoryTests.cs" />
+    <Compile Include="Integrationtests\Infrastructure\IoC\IoCConfigurationTests.cs" />
+    <Compile Include="Integrationtests\Repositories\DataRepositoryTests.cs" />
+    <Compile Include="Integrationtests\Repositories\MetadataRepositoryTests.cs" />
+    <Compile Include="Integrationtests\Repositories\OracleDataRepositoryTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unittests\BusinessLogic\Commands\DeliveryEngineExecuteCommandTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\DataValidators\DataValidatorBaseTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\DataValidators\DataValidatorsTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\DataValidators\ForeignKeysDataValidatorTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\DataValidators\MappingDataValidatorTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\DataValidators\PrimaryKeyDataValidatorTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\DeliveryEngineTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\Events\ArchiveDataForTargetTableEventArgsTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\Events\ArchiveMetadataEventArgsTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\Events\DataValidatorEventArgsTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\Events\GetDataForTargetTableEventArgsTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\Events\GetDataSourceEventArgsTests.cs" />
+    <Compile Include="Unittests\BusinessLogic\Events\ValidateDataInTargetTableEventArgsTests.cs" />
+    <Compile Include="Unittests\Domain\Comparers\NameSourceComparerTests.cs" />
+    <Compile Include="Unittests\Domain\Comparers\NameTargetComparerTests.cs" />
+    <Compile Include="Unittests\Domain\Data\DataObjectBaseTests.cs" />
+    <Compile Include="Unittests\Domain\Data\DocumentDataTests.cs" />
+    <Compile Include="Unittests\Domain\Data\FieldDataTests.cs" />
+    <Compile Include="Unittests\Domain\DomainObjectBaseTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\ContextDocumentTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\CreatorTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\DataSourceTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\DocumentAuthorTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\DocumentBaseTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\DynamicMapTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\EqualCriteriaTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\ExcludeCriteriaTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\ExcludeFieldCriteriaTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\FilterTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\FormClassTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\FunctionalityBaseTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\IntervalCriteriaTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\MarkFunctionalityTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\MetadataObjectBaseTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\NamedObjectTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\NotNullCriteriaTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\PoolCriteriaTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\StaticMapTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\TableDocumentTests.cs" />
+    <Compile Include="Unittests\Domain\Metadata\ViewTests.cs" />
+    <Compile Include="Unittests\Infrastructure\ExceptionHandling\ExceptionHandlerTests.cs" />
+    <Compile Include="Unittests\Infrastructure\ExceptionHandling\ExceptionLoggerTests.cs" />
+    <Compile Include="Unittests\Infrastructure\ExceptionHandling\HandleExceptionEventArgsTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineAlreadyHandledExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineBusinessExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineConvertExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineExceptionBaseTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineExceptionTestHelper.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineMappingExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineMetadataExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineRepositoryExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineSystemExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Exceptions\DeliveryEngineValidateExceptionTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\ArchiveVersionRepositoryConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\BusinessLogicConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\ConfigurationRepositoryConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\DataManipulatorsConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\DataRepositoryConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\DataValidatorsConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\DocumentRepositoryConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\ExceptionHandlingConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\ExceptionLoggerConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\ForeignKeysDataValidatorConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\InformationLoggerConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\MappingDataValidatorConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\MetadataRepositoryConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\IoC\PrimaryKeyDataValidatorConfigurationProviderTests.cs" />
+    <Compile Include="Unittests\Infrastructure\Log\InformationLoggerTests.cs" />
+    <Compile Include="Unittests\Repositories\ArchiveVersionRepositoryTests.cs" />
+    <Compile Include="Unittests\Repositories\Configuration\ConfigurationRepositoryTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\DataManipulatorBaseTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\DataManipulatorsTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\DataSetterTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\ForeignKeyCleanerTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\ForeignKeyDeleterTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\MissingForeignKeyHandlerTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\MissingForeignKeyWorkerBaseTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\PrimaryKeyAdderTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\RegularExpressionReplacerTests.cs" />
+    <Compile Include="Unittests\Repositories\DataManipulators\RowDuplicatorTests.cs" />
+    <Compile Include="Unittests\Repositories\Data\OldToNewDataRepositoryTests.cs" />
+    <Compile Include="Unittests\Repositories\Data\OracleClientFactoryTests.cs" />
+    <Compile Include="Unittests\Repositories\Data\OracleClientTests.cs" />
+    <Compile Include="Unittests\Repositories\Data\OracleDataRepositoryTests.cs" />
+    <Compile Include="Unittests\Repositories\Document\OldToNewDocumentRepositoryTests.cs" />
+    <Compile Include="Unittests\Repositories\Events\CloneOldToNewDataRepositoryEventArgsTests.cs" />
+    <Compile Include="Unittests\Repositories\Events\CloneOracleDataRepositoryEventArgsTests.cs" />
+    <Compile Include="Unittests\Repositories\Events\HandleOldToNewDataEventArgsTests.cs" />
+    <Compile Include="Unittests\Repositories\Events\HandleOracleDataEventArgsTests.cs" />
+    <Compile Include="Unittests\Repositories\Metadata\OldToNewMetadataRepositoryConfigurationValuesTests.cs" />
+    <Compile Include="Unittests\Repositories\Metadata\OldToNewMetadataRepositoryForOracleTests.cs" />
+    <Compile Include="Unittests\Repositories\Metadata\OldToNewMetadataRepositoryTests.cs" />
+    <Compile Include="Unittests\Repositories\RepositoryTestHelper.cs" />
+    <Compile Include="Unittests\Resources\ResourceTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.BusinessLogic.Interfaces\DsiNext.DeliveryEngine.BusinessLogic.Interfaces.csproj">
+      <Project>{E097167A-4C04-4B29-83DC-A341A9C1DD6C}</Project>
+      <Name>DsiNext.DeliveryEngine.BusinessLogic.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.BusinessLogic\DsiNext.DeliveryEngine.BusinessLogic.csproj">
+      <Project>{D5EB098B-F440-4832-8137-67F315ACF2D4}</Project>
+      <Name>DsiNext.DeliveryEngine.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Domain.Interfaces\DsiNext.DeliveryEngine.Domain.Interfaces.csproj">
+      <Project>{3D311AFE-B790-4B64-85E0-C70E4BDB2820}</Project>
+      <Name>DsiNext.DeliveryEngine.Domain.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Domain\DsiNext.DeliveryEngine.Domain.csproj">
+      <Project>{F0C4EA48-66A5-465D-97BB-B11513EED60A}</Project>
+      <Name>DsiNext.DeliveryEngine.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Infrastructure.Interfaces\DsiNext.DeliveryEngine.Infrastructure.Interfaces.csproj">
+      <Project>{5798D502-69D9-45C6-BE40-F05A6E4E33AD}</Project>
+      <Name>DsiNext.DeliveryEngine.Infrastructure.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Infrastructure\DsiNext.DeliveryEngine.Infrastructure.csproj">
+      <Project>{19B5EE12-2F0C-4AAD-AAB2-C6D21C927FF0}</Project>
+      <Name>DsiNext.DeliveryEngine.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Configuration\DsiNext.DeliveryEngine.Repositories.Configuration.csproj">
+      <Project>{96A434DB-CF02-4149-B5FC-C08C45C6D48D}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Data.OldToNew\DsiNext.DeliveryEngine.Repositories.Data.OldToNew.csproj">
+      <Project>{4524C254-27A9-4E38-9443-FA9EBC7E1A93}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Data.OldToNew</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Data.Oracle\DsiNext.DeliveryEngine.Repositories.Data.Oracle.csproj">
+      <Project>{C7FD6E93-7175-437A-8B02-834953A0BE5D}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Data.Oracle</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Document.OldToNew\DsiNext.DeliveryEngine.Repositories.Document.OldToNew.csproj">
+      <Project>{AE205F90-B6F5-4ED1-AEA3-F22D34E3A468}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Document.OldToNew</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Interfaces\DsiNext.DeliveryEngine.Repositories.Interfaces.csproj">
+      <Project>{0C5A0EBC-63CF-4328-BE83-C89351CB97CD}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Metadata.OldToNew\DsiNext.DeliveryEngine.Repositories.Metadata.OldToNew.csproj">
+      <Project>{6127583B-B2F4-41F9-AE3F-72BE8456257B}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Metadata.OldToNew</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories\DsiNext.DeliveryEngine.Repositories.csproj">
+      <Project>{2D0DC2A4-3140-488A-B0DB-43CEE4841629}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Resources\DsiNext.DeliveryEngine.Resources.csproj">
+      <Project>{3F4027A3-4555-4E73-9C43-4F96E78A8B38}</Project>
+      <Name>DsiNext.DeliveryEngine.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Testdata\OldDeliveryFormatForOracle\12549001\00012549\FILMAP.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormatForOracle\12549001\00012549\GENINFO.OLD">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormatForOracle\12549001\00012549\GENINFO.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormatForOracle\12549001\00012549\SKABER.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormatForOracle\12549001\ARKVER.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormatForOracle\12549003\ARKVER.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\DOKTABEL.001">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\FILMAP.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\GENINFO.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\INDKSTRM.ARK">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\M2MTABEL.ARK">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\SAG.ARK">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\SAGSBEH.ARK">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\00040330\SKABER.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330001\ARKVER.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330002\00040330\DOKTABEL.002">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Testdata\OldDeliveryFormat\40330002\ARKVER.TAB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549001\00012549\00012549.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000002.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000003.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000004.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000005.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000006.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000007.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000008.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000009.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000010.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000011.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000012.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000013.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000014.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000015.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000016.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AELDSTE\00000017.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\AFVBESTM\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\DIAGRAM\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\FORSKELS\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\FSAGSTYP\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\LOVGRUND\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\OPGAVE10\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\OPGAVE11\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\OPGAVE12\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\OPGAVE13\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\OPGAVE14\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\PARM\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SCREEN01\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SCREEN02\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SCREEN03\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SCREEN04\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000002.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000003.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000004.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000005.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000006.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000007.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000008.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000009.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000010.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000011.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000012.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000013.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000014.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000015.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000016.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000017.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000018.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000019.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000020.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000021.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000022.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000023.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000024.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000025.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000026.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000027.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000028.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000029.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000030.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000031.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000032.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000033.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000034.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000035.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000036.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000037.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000038.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000039.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000040.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000041.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000042.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000043.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000044.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000045.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000046.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000047.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000048.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000049.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000050.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000051.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000052.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\SKIFTE\00000053.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\TABELLER\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\TASTER\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\TVANG\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED01\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED05\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED06\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED07\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED08\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED09\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED10\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED11\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED12\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED13\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED14\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED15\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\12549003\00012549\VEJLED16\00000001.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormatForOracle\DataManipulatorsJMTSYS.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormat\40330001\00040330\00040330.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormat\40330001\00040330\GENINFO1\ERDIAG01.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormat\40330001\00040330\GENINFO2\TBESKR01.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Testdata\OldDeliveryFormat\40330001\00040330\GENINFO2\TBESKR02.TIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

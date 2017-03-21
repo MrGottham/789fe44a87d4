@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.CandidateKey">
+    <Position X="17.25" Y="8.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\CandidateKey.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.Table">
+    <Position X="13" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AiECAAAkAgCAAACAAQKAAAAAAAAAAAACADAAEgKAhAA=</HashCode>
+      <FileName>Metadata\Table.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.DynamicMap&lt;TSource, TTarget&gt;">
+    <Position X="18.25" Y="2.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAhAAAAgAA=</HashCode>
+      <FileName>Metadata\DynamicMap.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.Field">
+    <Position X="15.25" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ABCAAAAEABAAAkABAAIAQAAAAAEAAIBABEAEAAAABAA=</HashCode>
+      <FileName>Metadata\Field.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.Filter">
+    <Position X="11.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAgAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\Filter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.ForeignKey">
+    <Position X="19.75" Y="8.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEEAAABIAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\ForeignKey.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.KeyBase">
+    <Position X="18.25" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEABAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Metadata\KeyBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.MetadataObjectBase">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\MetadataObjectBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.NamedObject">
+    <Position X="12.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACACAAAAAAgAAAMAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Metadata\NamedObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.StaticMap&lt;TSource, TTarget&gt;">
+    <Position X="15.5" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhAAAAgAA=</HashCode>
+      <FileName>Metadata\StaticMap.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.Criteria">
+    <Position X="9.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\Criteria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.DataSource">
+    <Position X="9.5" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAQAAAAAAAACAIACAAAAAAAAA=</HashCode>
+      <FileName>Metadata\DataSource.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.PoolCriteria">
+    <Position X="8.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\PoolCriteria.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.IntervalCriteria">
+    <Position X="11" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\IntervalCriteria.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DsiNext.DeliveryEngine.Domain.Metadata.EqualCriteria">
+    <Position X="8.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Metadata\EqualCriteria.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="urn:dsinext:deliveryengine:repositories:datamanipulators:1.0.0" elementFormDefault="qualified" xmlns="urn:dsinext:deliveryengine:repositories:datamanipulators:1.0.0" xmlns:mstns="urn:dsinext:deliveryengine:repositories:datamanipulators:1.0.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!-- TableNameType -->
+  <xs:simpleType name="TableNameType">
+    <xs:annotation>
+      <xs:documentation>Name of the table.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- FieldNameType -->
+  <xs:simpleType name="FieldNameType">
+    <xs:annotation>
+      <xs:documentation>Name of the field.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- FieldCriteriaBaseType -->
+  <xs:complexType name="FieldCriteriaBaseType">
+    <xs:annotation>
+      <xs:documentation>Base type for a field criteria.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="field" type="FieldNameType" use="required">
+      <xs:annotation>
+        <xs:documentation>Name of the field for the criteria.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- FieldEqualCriteriaType -->
+  <xs:complexType name="FieldEqualCriteriaType">
+    <xs:annotation>
+      <xs:documentation>Equal criteria for a field value.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FieldCriteriaBaseType">
+        <xs:attribute name="value" use="required">
+          <xs:annotation>
+            <xs:documentation>The equal value for the criteria.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="^[0-9A-Za-z¨]*"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- FieldPoolCriteriaType -->
+  <xs:complexType name="FieldPoolCriteriaType">
+    <xs:annotation>
+      <xs:documentation>Pool criteria for a field value.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FieldCriteriaBaseType">
+        <xs:attribute name="values" use="required">
+          <xs:annotation>
+            <xs:documentation>The pool values for the criteria, seperated by a comma.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="^[0-9A-Za-z¨]*[,[0-9A-Za-z¨]*]*"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- FieldIntervalCriteriaType -->
+  <xs:complexType name="FieldIntervalCriteriaType">
+    <xs:annotation>
+      <xs:documentation>Interval criteria for a field value.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FieldCriteriaBaseType">
+        <xs:attribute name="fromValue" use="required">
+          <xs:annotation>
+            <xs:documentation>The beginning value for the interval on the criteria.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:minLength value="1"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="toValue" use="required">
+          <xs:annotation>
+            <xs:documentation>The ending value for the interval on the criteria.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:minLength value="1"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- DataManipulatorBaseType -->
+  <xs:complexType name="DataManipulatorBaseType">
+    <xs:annotation>
+      <xs:documentation>Base type for a data manipulator.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="table" type="TableNameType" use="required">
+      <xs:annotation>
+        <xs:documentation>Table for the data maipulator.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- DataSetterType -->
+  <xs:complexType name="DataSetterType">
+    <xs:annotation>
+      <xs:documentation>Data manipulator to set or change a field value.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DataManipulatorBaseType">
+        <xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="EqualCriteria" type="FieldEqualCriteriaType" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Equal criteria for a given field value to sort out which data to manipulate.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="PoolCriteria" type="FieldPoolCriteriaType" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Pool criteria for a given field value to sort out which data to manipulate.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="IntervalCriteria" type="FieldIntervalCriteriaType" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Interval criteria for a given field value to sort out which data to manipulate.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+          <xs:element name="Field" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Field on which to set or change data.</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:attribute name="name" type="FieldNameType" use="required">
+                <xs:annotation>
+                  <xs:documentation>Name of the field on which to set or change data.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="value" type="xs:string" use="required">
+                <xs:annotation>
+                  <xs:documentation>The new field value.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- RegularExpressionApplyOnType -->
+  <xs:simpleType name="RegularExpressionApplyOnType">
+    <xs:annotation>
+      <xs:documentation>Indication of when the regular expression should apply to data.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ApplyOnMatch"/>
+      <xs:enumeration value="ApplyOnUnmatch"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- RegularExpressionReplacerType -->
+  <xs:complexType name="RegularExpressionReplacerType">
+    <xs:annotation>
+      <xs:documentation>Data manipulator to replace values on a given field where the existing field value matches or unmatches a regular expression.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DataManipulatorBaseType">
+        <xs:sequence>
+          <xs:element name="Field" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Field on which to set or change data.</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:attribute name="name" type="FieldNameType" use="required">
+                <xs:annotation>
+                  <xs:documentation>Name of the field on which to replace data.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="regularExpression" type="xs:string" use="required">
+                <xs:annotation>
+                  <xs:documentation>Regular expression criteria for replacing data on the field.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="applyOn" type="RegularExpressionApplyOnType" use="required">
+                <xs:annotation>
+                  <xs:documentation>Indication of when the regular expression replace data on the field.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="value" type="xs:string" use="required">
+                <xs:annotation>
+                  <xs:documentation>The new field value, where "{null}" indicates that the new field value is null.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- RowDuplicatorType -->
+  <xs:complexType name="RowDuplicatorType">
+    <xs:annotation>
+      <xs:documentation>Data manipulator to duplicate rows.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DataManipulatorBaseType">
+        <xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="EqualCriteria" type="FieldEqualCriteriaType" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Equal criteria for a given field value where the row should be duplicated.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="PoolCriteria" type="FieldPoolCriteriaType" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Pool criteria for a given field value where the row should be duplicated.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="IntervalCriteria" type="FieldIntervalCriteriaType" minOccurs="0" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Interval criteria for a given field value where the row should be duplicated.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+          <xs:element name="Field" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Fields on which to update values in the duplicated rows..</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:attribute name="name" type="FieldNameType" use="required">
+                <xs:annotation>
+                  <xs:documentation>Name of the field on which update the value.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="value" type="xs:string" use="required">
+                <xs:annotation>
+                  <xs:documentation>The new field value.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- MissingForeignKeyWorkerBaseType -->
+  <xs:complexType name="MissingForeignKeyWorkerBaseType">
+    <xs:annotation>
+      <xs:documentation>Base type for a worker to manipulate missing foreign key values.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="ForeignKey" minOccurs="1" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Foreign key to validate against.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="field" type="FieldNameType" use="required">
+            <xs:annotation>
+              <xs:documentation>Field name for the foreign key to validate agianst.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="targetTable" type="TableNameType" use="required">
+      <xs:annotation>
+        <xs:documentation>Name of the target table to validate against.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- PrimaryKeyAdderType -->
+  <xs:complexType name="PrimaryKeyAdderType">
+    <xs:annotation>
+      <xs:documentation>Data manipulator to add missing primary keys to a table.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="MissingForeignKeyWorkerBaseType">
+        <xs:sequence>
+          <xs:element name="SetValue" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Value to be set on the added row for the missing primary key.</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:attribute name="field" type="FieldNameType" use="required">
+                <xs:annotation>
+                  <xs:documentation>Field name where to set a value on the added row.</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="value" use="required">
+                <xs:annotation>
+                  <xs:documentation>Value to be set in field on the added row.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- ForeignKeyCleanerType -->
+  <xs:complexType name="ForeignKeyCleanerType">
+    <xs:annotation>
+      <xs:documentation>Data manipulator to clear missing foreign key values in a table.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="MissingForeignKeyWorkerBaseType">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- ForeignKeyDeleterType -->
+  <xs:complexType name="ForeignKeyDeleterType">
+    <xs:annotation>
+      <xs:documentation>Data manipulator to delete rows with missing foreign keys in a table.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="MissingForeignKeyWorkerBaseType">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- MissingForeignKeyHandlerType-->
+  <xs:complexType name="MissingForeignKeyHandlerType">
+    <xs:annotation>
+      <xs:documentation>Data manipulator to handle missing foreign keys.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DataManipulatorBaseType">
+        <xs:sequence>
+          <xs:choice minOccurs="1" maxOccurs="1">
+            <xs:element name="PrimaryKeyAdder" type="PrimaryKeyAdderType" minOccurs="1" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Data manipulator to add missing primary keys to a table.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="ForeignKeyCleaner" type="ForeignKeyCleanerType" minOccurs="1" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Data manipulator to clear missing foreign key values in a table.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="ForeignKeyDeleter" type="ForeignKeyDeleterType" minOccurs="1" maxOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Data manipulator to delete rows with missing foreign keys in a table.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:element name="DataManipulators">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="DataSetter" type="DataSetterType" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Data manipulator to set or change a field value.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="RegularExpressionReplacer" type="RegularExpressionReplacerType" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Data manipulator to replace values on a given field where the existing field value matches or unmatches a regular expression.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="RowDuplicator" type="RowDuplicatorType" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Data manipulator to duplicate rows.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="MissingForeignKeyHandler" type="MissingForeignKeyHandlerType" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Data manipulator to handle missing foreign keys.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

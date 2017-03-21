@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<arkiveringsversion xmlns="sa_metadata" xmlns:xsi="http://www.w3.org/2001/xmlschema-instance" xsi:schemalocation="sa_metadata sa_md_11.xsd" sa_version="1.1">
+<tabel>
+    <titel>SAG</titel>
+    <posttype>Fast</posttype>
+    <feltdef>
+        <titel>SagsID</titel>
+        <datatype>num</datatype>
+        <bredde>8</bredde>
+        <feltinfo>Primærnøgle, ikke betydningsbærende</feltinfo>
+        <feltfunk>Sagsidentifikation</feltfunk>
+    </feltdef>
+    <feltdef>
+        <titel>Dato</titel>
+        <datatype>date</datatype>
+        <bredde>8</bredde>
+        <feltinfo>Dato for sagsoprettelse</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Sagsnr</titel>
+        <datatype>num</datatype>
+        <bredde>8</bredde>
+        <feltinfo>Betydningsbærende sagsnummer</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Sagstitel</titel>
+        <datatype>string</datatype>
+        <bredde>50</bredde>
+        <feltinfo>titel</feltinfo>
+        <feltfunk>Sagstitel</feltfunk>
+    </feltdef>
+    <feltdef>
+        <titel>SagsbehandlerID</titel>
+        <datatype>num</datatype>
+        <bredde>4</bredde>
+        <feltinfo>Fremmednøgle til Sagsbehandlertabel</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Kontor</titel>
+        <datatype>num</datatype>
+        <bredde>2</bredde>
+        <feltinfo>Kodet felt, indeholder nr. på den ansvarlige afd.</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Dokantal</titel>
+        <datatype>num</datatype>
+        <bredde>5</bredde>
+        <feltinfo>Antal dokumenter på sagen</feltinfo>
+    </feltdef>
+    <pn>
+        <titel>SagsID</titel>
+    </pn>
+    <fn>
+        <titel>SagsbehandlerID</titel>
+        <fremmedtabel>
+        <titel>SAGSBEH</titel>
+        <titel>SagsbehandlerID</titel>
+        </fremmedtabel>
+        <kardinalitet>m</kardinalitet><kardinalitet>1</kardinalitet>
+    </fn>
+    <kodedef>
+        <titel>Kontor</titel>
+        <kode>01</kode> <kode>1. Kontor</kode>
+        <kode>02</kode> <kode>2. Kontor</kode>
+        <kode>07</kode> <kode>7. Kontor</kode>
+        <kode>08</kode> <kode>8. Kontor</kode>
+    </kodedef>
+    <tabelinfo>Tabel med oplysninger om sager</tabelinfo>
+</tabel>
+
+<tabel>
+    <titel>SAGSBEH</titel>
+    <posttype>Fast</posttype>
+    <feltdef>
+        <titel>SagsbehandlerID</titel>
+        <datatype>num</datatype>
+        <bredde>4</bredde>
+        <feltinfo>Primærnøgle</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Navn</titel>
+        <datatype>string</datatype>
+        <bredde>25</bredde>
+        <feltinfo>Navn på sagsbehandler</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Initialer</titel>
+        <datatype>string</datatype>
+        <bredde>4</bredde>
+        <feltinfo>Initialer på sagsbehandler</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Kontor</titel>
+        <datatype>num</datatype>
+        <bredde>2</bredde>
+        <feltinfo>Kodet felt, indeholder nr. på den ansvarlige afd. eller kontor</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Tlf</titel>
+        <datatype>string</datatype>
+        <bredde>10</bredde>
+        <feltinfo>Lokal Tlf. på sagsbehandler</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Epost</titel>
+        <datatype>string</datatype>
+        <bredde>40</bredde>
+        <feltinfo>E-mailadresse</feltinfo>
+    </feltdef>
+    <pn>
+        <titel>SagsbehandlerID</titel>
+    </pn>
+    <kodedef>
+        <titel>Kontor</titel>
+        <kode>01</kode> <kode>1. Kontor</kode>
+        <kode>02</kode> <kode>2. Kontor</kode>
+        <kode>07</kode> <kode>7. Kontor</kode>
+        <kode>08</kode> <kode>8. Kontor</kode>
+    </kodedef>
+    <tabelinfo>Tabel over sagsbehandlere</tabelinfo>
+</tabel>
+
+<tabel>
+    <titel>DOKTABEL</titel>
+    <posttype>Fast</posttype>
+    <feltdef>
+        <titel>DokumentID</titel>
+        <datatype>num</datatype>
+        <bredde>5</bredde>
+        <feltinfo>Primærnøgle</feltinfo>
+        <feltfunk>Dokumentidentifikation</feltfunk>
+    </feltdef>
+    <feltdef>
+        <titel>Dato</titel>
+        <datatype>date</datatype>
+        <bredde>8</bredde>
+        <feltinfo>Datering af dokument</feltinfo>
+        <feltfunk>Dokumentdato</feltfunk>
+    </feltdef>
+    <feltdef>
+        <titel>Dokumenttitel</titel>
+        <datatype>string</datatype>
+        <bredde>50</bredde>
+        <feltinfo>Dokumenttitel</feltinfo>
+        <feltfunk>Dokumenttitel</feltfunk>
+    </feltdef>
+    <feltdef>
+        <titel>SagsID</titel>
+        <datatype>num</datatype>
+        <bredde>8</bredde>
+        <feltinfo>Fremmednøgle til sagstabel</feltinfo>
+    </feltdef>
+    <pn>
+        <titel>DokumentID</titel>
+    </pn>
+    <fn>
+        <titel>SagsID</titel>
+        <fremmedtabel>
+        <titel>SAG</titel>
+        <titel>SagsID</titel>
+        </fremmedtabel>
+        <kardinalitet>m</kardinalitet><kardinalitet>1</kardinalitet>
+    </fn>
+    <tabelinfo>Tabel med oplysninger om dokumenter</tabelinfo>
+</tabel>
+
+<tabel>
+    <titel>INDKSTRM</titel>
+    <posttype>Fast</posttype>
+    <feltdef>
+        <titel>IndekstermID</titel>
+        <datatype>num</datatype>
+        <bredde>5</bredde>
+        <feltinfo>Primærnøgle</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>FaderID</titel>
+        <datatype>num</datatype>
+        <bredde>5</bredde>
+        <feltinfo>Fremmednøgle til indekstermtabel</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>Indexterm</titel>
+        <datatype>String</datatype>
+        <bredde>50</bredde>
+        <feltinfo>Indeksterm</feltinfo>
+    </feltdef>
+    <pn>
+        <titel>IndekstermID</titel>
+    </pn>
+    <fn>
+        <titel>FaderID</titel>
+        <fremmedtabel>
+        <titel>INDKSTRM</titel>
+        <titel>IndekstermID</titel>
+        </fremmedtabel>
+        <kardinalitet>m</kardinalitet><kardinalitet>1</kardinalitet>
+    </fn>
+    <tabelinfo>Tabel med indekstermer</tabelinfo>
+</tabel>
+
+<tabel>
+    <titel>M2MTABEL</titel>
+    <posttype>Fast</posttype>
+    <feltdef>
+        <titel>ID</titel>
+        <datatype>num</datatype>
+        <bredde>5</bredde>
+        <feltinfo>Primærnøgle</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>IndekstermID</titel>
+        <datatype>num</datatype>
+        <bredde>5</bredde>
+        <feltinfo>fremmednøgle til indekstermtabel</feltinfo>
+    </feltdef>
+    <feltdef>
+        <titel>SagsID</titel>
+        <datatype>num</datatype>
+        <bredde>8</bredde>
+        <feltinfo>fremmednøgle til sagstabel</feltinfo>
+    </feltdef>
+    <pn>
+        <titel>ID</titel>
+    </pn>
+    <fn>
+        <titel>IndekstermID</titel>
+        <fremmedtabel>
+        <titel>INDKSTRM</titel>
+        <titel>IndekstermID</titel>
+        </fremmedtabel>
+        <kardinalitet>m</kardinalitet><kardinalitet>1</kardinalitet>
+    </fn>
+    <fn>
+        <titel>SagsID</titel>
+        <fremmedtabel>
+        <titel>SAG</titel>
+        <titel>SagsID</titel>
+        </fremmedtabel>
+        <kardinalitet>m</kardinalitet><kardinalitet>1</kardinalitet>
+    </fn>
+    <tabelinfo>Mellemtabel der gør en mange til mange relation mellem SAG og INDKSTRM mulig</tabelinfo>
+</tabel>
+
+<saq><saqinfo>Søgning af dokumenter efter sagsnummer og datointerval</saqinfo>
+<saqdata>CREATE TABLE f (snr VARCHAR(16), brevdatofra DATE, brevdatotil DATE)    INSERT INTO f (snr, brevdatofra, brevdatotil) VALUES (,,)    SELECT sag.sagsnr, sag.sagstitel, doktabel.dokumenttitel, doktabel.dato    FROM sag, doktabel    WHERE     sag.sagsnr LIKE (SELECT snr FROM f)+'%'  and    doktabel.sagsid=sag.sagsid and    doktabel.dato &lt;  (SELECT brevdatotil FROM f) and    doktabel.dato &gt; (SELECT brevdatofra FROM f)     DROP TABLE f</saqdata>
+</saq>
+
+</arkiveringsversion>

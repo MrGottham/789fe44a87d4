@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2D0DC2A4-3140-488A-B0DB-43CEE4841629}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DsiNext.DeliveryEngine.Repositories</RootNamespace>
+    <AssemblyName>DsiNext.DeliveryEngine.Repositories</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Domstolene.JFS.CommonLibrary.IoC.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External references\Domstolene.JFS.CommonLibrary.IoC.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArchiveVersionRepository.cs" />
+    <Compile Include="DataManipulators\DataManipulatorBase.cs" />
+    <Compile Include="DataManipulators\DataManipulators.cs" />
+    <Compile Include="DataManipulators\DataSetter.cs" />
+    <Compile Include="DataManipulators\ForeignKeyCleaner.cs" />
+    <Compile Include="DataManipulators\ForeignKeyDeleter.cs" />
+    <Compile Include="DataManipulators\MissingForeignKeyHandler.cs" />
+    <Compile Include="DataManipulators\MissingForeignKeyWorkerBase.cs" />
+    <Compile Include="DataManipulators\PrimaryKeyAdder.cs" />
+    <Compile Include="DataManipulators\RegularExpressionReplacer.cs" />
+    <Compile Include="DataManipulators\RowDuplicator.cs" />
+    <Compile Include="XmlFileBase.cs" />
+    <Compile Include="Indices\ArchiveIndex.cs" />
+    <Compile Include="Indices\ContextDocumentationIndex.cs" />
+    <Compile Include="Indices\FileIndex.cs" />
+    <Compile Include="Indices\TableIndex.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tables\TableXml.cs" />
+    <Compile Include="Tables\TableXsd.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Domain.Interfaces\DsiNext.DeliveryEngine.Domain.Interfaces.csproj">
+      <Project>{3D311AFE-B790-4B64-85E0-C70E4BDB2820}</Project>
+      <Name>DsiNext.DeliveryEngine.Domain.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Domain\DsiNext.DeliveryEngine.Domain.csproj">
+      <Project>{F0C4EA48-66A5-465D-97BB-B11513EED60A}</Project>
+      <Name>DsiNext.DeliveryEngine.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Infrastructure.Interfaces\DsiNext.DeliveryEngine.Infrastructure.Interfaces.csproj">
+      <Project>{5798D502-69D9-45C6-BE40-F05A6E4E33AD}</Project>
+      <Name>DsiNext.DeliveryEngine.Infrastructure.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Repositories.Interfaces\DsiNext.DeliveryEngine.Repositories.Interfaces.csproj">
+      <Project>{0C5A0EBC-63CF-4328-BE83-C89351CB97CD}</Project>
+      <Name>DsiNext.DeliveryEngine.Repositories.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DsiNext.DeliveryEngine.Resources\DsiNext.DeliveryEngine.Resources.csproj">
+      <Project>{3F4027A3-4555-4E73-9C43-4F96E78A8B38}</Project>
+      <Name>DsiNext.DeliveryEngine.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemas\standard\archiveIndex.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemas\standard\contextDocumentationIndex.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemas\standard\docIndex.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemas\standard\fileIndex.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemas\standard\tableIndex.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemas\standard\XMLSchema.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ContextDocumentation\" />
+    <Folder Include="Schemas\localShared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemas\DataManipulators.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -391,11 +391,14 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.Domain.Data
             var dataObject = new MyDataObject(fieldMock, new Fixture());
             Assert.That(dataObject, Is.Not.Null);
 
-            var exception = Assert.Throws<DeliveryEngineMappingException>(() => dataObject.GetTargetValue<string>());
+            var exception = Assert.Throws<DeliveryEngineSystemException>(() => dataObject.GetTargetValue<string>());
             Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.Message, Is.Not.Null);
-            Assert.That(exception.Message, Is.Not.Empty);
-            Assert.That(exception.Message, Is.Not.StartsWith(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, dataObject.GetSourceValue<string>(), fieldMock.NameTarget, tableMock.NameTarget, string.Empty)));
+
+            var innerException = exception.InnerException;
+            Assert.That(innerException, Is.Not.Null);
+            Assert.That(innerException.Message, Is.Not.Null);
+            Assert.That(innerException.Message, Is.Not.Empty);
+            Assert.That(innerException.Message, Is.Not.StartsWith(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, dataObject.GetSourceValue<string>(), fieldMock.NameTarget, tableMock.NameTarget, string.Empty)));
 
             fieldMock.AssertWasCalled(m => m.NameTarget);
             tableMock.AssertWasCalled(m => m.NameTarget);

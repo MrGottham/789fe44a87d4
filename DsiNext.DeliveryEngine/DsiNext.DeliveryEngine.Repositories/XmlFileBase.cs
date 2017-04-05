@@ -17,8 +17,6 @@ namespace DsiNext.DeliveryEngine.Repositories
     {
         private readonly FileInfo _path;
         private readonly FileIndex _fileIndex;
-        private readonly string _namespace;
-        private readonly string _namespaceLocation;
         private XmlSchema _schema;
 
         #region Member Variables
@@ -31,8 +29,8 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         protected XmlFileBase(FileInfo path, FileIndex fileIndex)
         {
-            if (path == null) throw new ArgumentNullException("path");
-            if (fileIndex == null && (this is FileIndex == false)) throw new ArgumentNullException("fileIndex");
+            if (path == null) throw new ArgumentNullException(nameof(path));
+            if (fileIndex == null && (this is FileIndex == false)) throw new ArgumentNullException(nameof(fileIndex));
 
             _path = path;
             _fileIndex = fileIndex;
@@ -42,16 +40,16 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         protected XmlFileBase(FileInfo path, FileIndex fileIndex, XmlSchema xsd, string @namespace, string namespaceLocation)
         {
-            if (path == null) throw new ArgumentNullException("path");
-            if (xsd == null) throw new ArgumentNullException("xsd");
-            if (@namespace == null) throw new ArgumentNullException("namespace");
-            if (namespaceLocation == null) throw new ArgumentNullException("namespaceLocation");
-            if (fileIndex == null && (this is FileIndex == false)) throw new ArgumentNullException("fileIndex");
+            if (path == null) throw new ArgumentNullException(nameof(path));
+            if (xsd == null) throw new ArgumentNullException(nameof(xsd));
+            if (@namespace == null) throw new ArgumentNullException(nameof(@namespace));
+            if (namespaceLocation == null) throw new ArgumentNullException(nameof(namespaceLocation));
+            if (fileIndex == null && (this is FileIndex == false)) throw new ArgumentNullException(nameof(fileIndex));
 
             _path = path;
             _fileIndex = fileIndex;
-            _namespace = @namespace;
-            _namespaceLocation = namespaceLocation;
+            Namespace = @namespace;
+            NamespaceLocation = namespaceLocation;
 
             InitDocument();
         }
@@ -64,13 +62,11 @@ namespace DsiNext.DeliveryEngine.Repositories
 
             Document.Schemas.Add(Schema);
 
-
             var decleration = Document.CreateXmlDeclaration("1.0", "utf-8", null);
             Document.AppendChild(decleration);
 
             var root = Document.CreateElement(RootName, Namespace);
             Document.AppendChild(root);
-
 
             var schemaLocation = Document.CreateAttribute("xsi", "schemaLocation", XsdNamespace);
             schemaLocation.Value = NamespaceLocation;
@@ -79,11 +75,11 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         protected XmlDocument Document { get; private set; }
 
-        protected XmlElement Root { get { return Document.DocumentElement; } }
+        protected XmlElement Root => Document.DocumentElement;
 
-        protected virtual string Namespace { get { return _namespace; } }
+        protected virtual string Namespace { get; }
 
-        protected virtual string NamespaceLocation { get { return _namespaceLocation; } }
+        protected virtual string NamespaceLocation { get; }
 
         protected virtual XmlSchema Schema
         {
@@ -111,8 +107,8 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         protected XmlElement AddElement(XmlElement parent, string name)
         {
-            if (parent == null) throw new ArgumentNullException("parent");
-            if (name == null) throw new ArgumentNullException("name");
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+            if (name == null) throw new ArgumentNullException(nameof(name));
 
             var element = Document.CreateElement(name, Namespace);
             parent.AppendChild(element);
@@ -121,8 +117,8 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         protected XmlElement AddElement(XmlElement parent, string name, string value, bool skipNullOrWhiteSpace = false)
         {
-            if (parent == null) throw new ArgumentNullException("parent");
-            if (name == null) throw new ArgumentNullException("name");
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+            if (name == null) throw new ArgumentNullException(nameof(name));
 
             if (skipNullOrWhiteSpace && String.IsNullOrWhiteSpace(value)) return null;
 
@@ -214,7 +210,7 @@ namespace DsiNext.DeliveryEngine.Repositories
         {
             if (eventArgs == null)
             {
-                throw new ArgumentNullException("eventArgs");
+                throw new ArgumentNullException(nameof(eventArgs));
             }
             switch (eventArgs.Severity)
             {
@@ -230,9 +226,9 @@ namespace DsiNext.DeliveryEngine.Repositories
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
-            var removeChars = new[] {'-', ','};
+            var removeChars = new[] {'-', ',', '@'};
             value = removeChars.Aggregate(value, (current, chr) => current.Replace(chr.ToString(CultureInfo.InvariantCulture), string.Empty));
             return value.Replace(" ", "_");
         }

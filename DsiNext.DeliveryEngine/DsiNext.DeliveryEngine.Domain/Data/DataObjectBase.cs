@@ -13,12 +13,6 @@ namespace DsiNext.DeliveryEngine.Domain.Data
     /// </summary>
     public abstract class DataObjectBase : DomainObjectBase, IDataObjectBase
     {
-        #region Private variables
-
-        private readonly IField _field;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -29,9 +23,9 @@ namespace DsiNext.DeliveryEngine.Domain.Data
         {
             if (field == null)
             {
-                throw new ArgumentNullException("field");
+                throw new ArgumentNullException(nameof(field));
             }
-            _field = field;
+            Field = field;
         }
 
         #endregion
@@ -41,13 +35,7 @@ namespace DsiNext.DeliveryEngine.Domain.Data
         /// <summary>
         /// Field reference for the data object.
         /// </summary>
-        public virtual IField Field
-        {
-            get
-            {
-                return _field;
-            }
-        }
+        public virtual IField Field { get; }
 
         #endregion
 
@@ -104,9 +92,9 @@ namespace DsiNext.DeliveryEngine.Domain.Data
                         var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                         if (deliveryEngineException != null)
                         {
-                            throw deliveryEngineException;
+                            throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
                         }
-                        throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                        throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
                     }
                 }
                 if (targetValueType.IsGenericType && targetValueType.GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -128,9 +116,9 @@ namespace DsiNext.DeliveryEngine.Domain.Data
                         var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                         if (deliveryEngineException != null)
                         {
-                            throw deliveryEngineException;
+                            throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
                         }
-                        throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                        throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
                     }
                 }
                 var parseMethod = targetValueType.GetMethod("Parse", new[] {typeof (string)});
@@ -155,9 +143,9 @@ namespace DsiNext.DeliveryEngine.Domain.Data
                     var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                     if (deliveryEngineException != null)
                     {
-                        throw deliveryEngineException;
+                        throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToParseValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
                     }
-                    throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToParseValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                    throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToParseValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
                 }
             }
 
@@ -176,9 +164,9 @@ namespace DsiNext.DeliveryEngine.Domain.Data
                 var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                 if (deliveryEngineException != null)
                 {
-                    throw deliveryEngineException;
+                    throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
                 }
-                throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
             }
         }
 

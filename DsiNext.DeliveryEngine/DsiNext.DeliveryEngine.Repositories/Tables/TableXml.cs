@@ -97,10 +97,10 @@ namespace DsiNext.DeliveryEngine.Repositories.Tables
                     return ((bool) value) ? "true" : "false";
 
                 case "DateTime":
-                    return ((DateTime) value).ToString("yyyy-MM-ddTHH:mm:ss");
+                    return ((DateTime) value).ToString(@"yyyy-MM-ddTHH:mm:ss");
 
                 case "TimeSpan":
-                    return ((TimeSpan) value).ToString("HH:mm:ss");
+                    return ((TimeSpan) value).ToString(@"hh\:mm\:ss");
 
                 default:
                     throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.DataTypeNotSupported, value.GetType().Name));

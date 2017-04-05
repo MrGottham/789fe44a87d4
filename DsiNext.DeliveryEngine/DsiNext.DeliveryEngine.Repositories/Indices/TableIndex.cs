@@ -17,7 +17,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
 
         public TableIndex(IDataSource dataSource, FileInfo path, FileIndex fileIndex) : base(path, fileIndex)
         {
-            if (dataSource == null) throw new ArgumentNullException("dataSource");
+            if (dataSource == null) throw new ArgumentNullException(nameof(dataSource));
 
             AddMetaData(dataSource);
         }
@@ -26,22 +26,16 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
 
         #region Properties
 
-        protected override string Namespace
-        {
-            get { return "http://www.sa.dk/xmlns/diark/1.0"; }
-        }
+        protected override string Namespace => "http://www.sa.dk/xmlns/diark/1.0";
 
-        protected override string NamespaceLocation
-        {
-            get { return "http://www.sa.dk/xmlns/diark/1.0 ../Schemas/standard/tableIndex.xsd"; }
-        }
+        protected override string NamespaceLocation => "http://www.sa.dk/xmlns/diark/1.0 ../Schemas/standard/tableIndex.xsd";
 
         protected override XmlSchema Schema
         {
             get
             {
                 var assembly = GetType().Assembly;
-                using (var resourceStream = assembly.GetManifestResourceStream(string.Format("{0}.Schemas.standard.{1}", assembly.GetName().Name, "tableIndex.xsd")))
+                using (var resourceStream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.Schemas.standard.tableIndex.xsd"))
                 {
                     if (resourceStream == null)
                     {
@@ -58,10 +52,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
             }
         }
 
-        protected override string RootName
-        {
-            get { return "siardDiark"; }
-        }
+        protected override string RootName => "siardDiark";
 
         private XmlElement TableElement { get; set; }
 
@@ -69,7 +60,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
 
         private void AddMetaData(IDataSource dataSource)
         {
-            if (dataSource == null) throw new ArgumentNullException("dataSource");
+            if (dataSource == null) throw new ArgumentNullException(nameof(dataSource));
 
             AddElement(Root, "version", "1.0");
             AddElement(Root, "dbName", MakeSqlIdentifier(dataSource.NameTarget), true);
@@ -88,11 +79,11 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
         {
             if (table == null)
             {
-                throw new ArgumentNullException("table");
+                throw new ArgumentNullException(nameof(table));
             }
             if (tableFolder == null)
             {
-                throw new ArgumentNullException("tableFolder");
+                throw new ArgumentNullException(nameof(tableFolder));
             }
             if (rowCount < 1)
             {
@@ -101,7 +92,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
 
             var namespaceManager = new XmlNamespaceManager(Document.NameTable);
             namespaceManager.AddNamespace("ns", Namespace);
-            var rowsElement = (XmlElement) TableElement.SelectSingleNode(String.Format("ns:table[ns:name = '{0}']/ns:rows", table.NameTarget), namespaceManager);
+            var rowsElement = (XmlElement) TableElement.SelectSingleNode($"ns:table[ns:name = '{table.NameTarget}']/ns:rows", namespaceManager);
             if (rowsElement != null)
             {
                 var rows = int.Parse(rowsElement.InnerText);
@@ -109,14 +100,14 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
                 return;
             }
             var tableElement = AddElement(TableElement, "table");
-            AddElement(tableElement, "name", table.NameTarget);
+            AddElement(tableElement, "name", MakeSqlIdentifier(table.NameTarget));
             AddElement(tableElement, "folder", tableFolder);
             AddElement(tableElement, "description", table.Description);
             var columnsElement = AddElement(tableElement, "columns");
             foreach (var field in table.Fields.Where(m => ArchiveVersionRepository.ExcludeField(m) == false))
             {
                 var columnElement = AddElement(columnsElement, "column");
-                AddElement(columnElement, "name", field.NameTarget);
+                AddElement(columnElement, "name", MakeSqlIdentifier(field.NameTarget));
                 AddElement(columnElement, "columnID", field.ColumnId);
                 AddElement(columnElement, "type", Sql1999DataType(field.DatatypeOfTarget, field.LengthOfTarget));
                 AddElement(columnElement, "typeOriginal", field.OriginalDatatype, true);
@@ -136,7 +127,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
 
         private static string Sql1999DataType(Type datatypeOfTarget, int lengthOfTarget)
         {
-            if (datatypeOfTarget == null) throw new ArgumentNullException("datatypeOfTarget");
+            if (datatypeOfTarget == null) throw new ArgumentNullException(nameof(datatypeOfTarget));
 
             var name = datatypeOfTarget.Name;
             if (datatypeOfTarget == typeof (int?))
@@ -170,7 +161,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
                 case "Char[]":
                 case "string":
                 case "String":
-                    return string.Format("NATIONAL CHARACTER VARYING({0})", lengthOfTarget);
+                    return $"NATIONAL CHARACTER VARYING({lengthOfTarget})";
 
                 case "int":
                 case "Int16":
@@ -185,7 +176,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
                 case "double":
                 case "Double":
                 case "Single":
-                    return string.Format("NUMERIC({0},2)", lengthOfTarget);
+                    return $"NUMERIC({lengthOfTarget},2)";
 
                 case "bool":
                 case "Boolean":
@@ -204,11 +195,11 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
 
         private void AddView(XmlElement parent, IView view)
         {
-            if (parent == null) throw new ArgumentNullException("parent");
-            if (view == null) throw new ArgumentNullException("view");
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+            if (view == null) throw new ArgumentNullException(nameof(view));
 
             var viewElement = AddElement(parent, "view");
-            AddElement(viewElement, "name", view.NameTarget); 
+            AddElement(viewElement, "name", MakeSqlIdentifier(view.NameTarget)); 
             AddElement(viewElement, "queryOriginal", view.SqlQuery);
             AddElement(viewElement, "description", view.Description, true);
         }
@@ -216,10 +207,10 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
         private void AddPrimaryKey(XmlElement parent, ICandidateKey key)
         {
             var primaryKey = AddElement(parent, "primaryKey");
-            AddElement(primaryKey, "name", key.NameTarget);
+            AddElement(primaryKey, "name", MakeSqlIdentifier(key.NameTarget));
 
             foreach (var field in key.Fields)
-                AddElement(primaryKey, "column", field.Key.NameTarget);
+                AddElement(primaryKey, "column", MakeSqlIdentifier(field.Key.NameTarget));
         }
 
         private void AddForeignKeys(XmlElement parent, IEnumerable<IForeignKey> keys)
@@ -229,15 +220,15 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
             foreach (var key in keys)
             {
                 var foreignKey = AddElement(foreignKeys, "foreignKey");
-                AddElement(foreignKey, "name", key.NameTarget);
-                AddElement(foreignKey, "referencedTable", key.CandidateKey.Table.NameTarget);
+                AddElement(foreignKey, "name", MakeSqlIdentifier(key.NameTarget));
+                AddElement(foreignKey, "referencedTable", MakeSqlIdentifier(key.CandidateKey.Table.NameTarget));
 
                 for (var i = 0; i < key.Fields.Count; i++)
                 {
                     var reference = AddElement(foreignKey, "reference");
 
-                    AddElement(reference, "column", key.Fields[i].Key.NameTarget);
-                    AddElement(reference, "referenced", key.CandidateKey.Fields[i].Key.NameTarget);
+                    AddElement(reference, "column", MakeSqlIdentifier(key.Fields[i].Key.NameTarget));
+                    AddElement(reference, "referenced", MakeSqlIdentifier(key.CandidateKey.Fields[i].Key.NameTarget));
                 }
             }
         }

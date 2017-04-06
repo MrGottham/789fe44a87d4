@@ -92,7 +92,7 @@ namespace DsiNext.DeliveryEngine.Domain.Data
                         var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                         if (deliveryEngineException != null)
                         {
-                            throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                            throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, deliveryEngineException.Message), deliveryEngineException);
                         }
                         throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
                     }
@@ -116,7 +116,7 @@ namespace DsiNext.DeliveryEngine.Domain.Data
                         var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                         if (deliveryEngineException != null)
                         {
-                            throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                            throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, deliveryEngineException.Message), deliveryEngineException);
                         }
                         throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToGetValueForField, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
                     }
@@ -143,7 +143,7 @@ namespace DsiNext.DeliveryEngine.Domain.Data
                     var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                     if (deliveryEngineException != null)
                     {
-                        throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToParseValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                        throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToParseValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, deliveryEngineException.Message), deliveryEngineException);
                     }
                     throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToParseValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
                 }
@@ -161,10 +161,15 @@ namespace DsiNext.DeliveryEngine.Domain.Data
             }
             catch (TargetInvocationException ex)
             {
+                var deliveryEngineMappingException = ex.InnerException as DeliveryEngineMappingException;
+                if (deliveryEngineMappingException != null)
+                {
+                    throw new DeliveryEngineMappingException(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, deliveryEngineMappingException.Message), deliveryEngineMappingException.Information, deliveryEngineMappingException);
+                }
                 var deliveryEngineException = ex.InnerException as DeliveryEngineExceptionBase;
                 if (deliveryEngineException != null)
                 {
-                    throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.InnerException.Message), ex.InnerException);
+                    throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, deliveryEngineException.Message), deliveryEngineException);
                 }
                 throw new DeliveryEngineSystemException(Resource.GetExceptionMessage(ExceptionMessage.UnableToMapValueForField, Equals(sourceValue, null) ? "{null}" : sourceValue, Field.NameTarget, Field.Table.NameTarget, ex.Message), ex);
             }

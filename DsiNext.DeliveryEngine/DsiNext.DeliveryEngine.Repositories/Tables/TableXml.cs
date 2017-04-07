@@ -32,28 +32,34 @@ namespace DsiNext.DeliveryEngine.Repositories.Tables
                 return;
             }
 
-            try
+            // We will now void to load large XML documents (> 32MB) into 
+            // the memory because this can make an OutOfMemoryException
+            // Therefore we will set the Document to NULL and use
+            // a XmlTextWriter instead.
+            long maxSizeForUsingXmlDocument = 1024 * 1024 * 32;
+            if (path.Length < maxSizeForUsingXmlDocument)
             {
-                using (var fileStream = new FileStream(path.FullName, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+                try
                 {
-                    using (var xmlReader = XmlReader.Create(fileStream, CreateXmlReaderSettings(base.Schema, ValidationType.None)))
+                    using (var fileStream = new FileStream(path.FullName, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
                     {
-                        Document.Load(xmlReader);
-                        xmlReader.Close();
+                        using (var xmlReader = XmlReader.Create(fileStream, CreateXmlReaderSettings(base.Schema, ValidationType.None)))
+                        {
+                            Document.Load(xmlReader);
+                            xmlReader.Close();
+                        }
                     }
+                    return;
                 }
-                return;
+                catch (OutOfMemoryException)
+                {
+                    Document = null;
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
             }
-            catch (OutOfMemoryException)
-            {
-                // We will now avoid to load the full XML document into 
-                // the mermory which can make an OutOfMemeryExcpetion
-                // when the XML documents get to large. Therefore we
-                // will use a XmlTextWriter to generate table data.
-                Document = null;
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
+
+            Document = null;
 
             _shadowFile = new FileInfo($"{path.FullName}.shadow");
             try

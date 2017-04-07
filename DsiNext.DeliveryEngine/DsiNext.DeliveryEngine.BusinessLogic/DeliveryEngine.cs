@@ -589,10 +589,7 @@ namespace DsiNext.DeliveryEngine.BusinessLogic
                     archiveDataForTargetTableEventArgs = new ArchiveDataForTargetTableEventArgs(dataSource, table, _tableDataBlock[table], tableData.Select(m => m.Value).Sum(m => m.Count()));
                 }
                 RaiseEvent(BeforeArchiveDataForTargetTable, archiveDataForTargetTableEventArgs);
-                lock (_syncRoot)
-                {
-                    ArchiveVersionRepository.ArchiveTableData(tableData);
-                }
+                ArchiveVersionRepository.ArchiveTableData(tableData, _syncRoot);
             }
             if (tableWorker.CancellationPending)
             {

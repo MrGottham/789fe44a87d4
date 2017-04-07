@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -90,6 +91,8 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
                 throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.IllegalValue, rowCount, "rowCount"));
             }
 
+            ReadOnlyObservableCollection<IFilter> fieldFilters = table.FieldFilters;
+
             var namespaceManager = new XmlNamespaceManager(Document.NameTable);
             namespaceManager.AddNamespace("ns", Namespace);
             var rowsElement = (XmlElement) TableElement.SelectSingleNode($"ns:table[ns:name = '{table.NameTarget}']/ns:rows", namespaceManager);
@@ -104,7 +107,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
             AddElement(tableElement, "folder", tableFolder);
             AddElement(tableElement, "description", table.Description);
             var columnsElement = AddElement(tableElement, "columns");
-            foreach (var field in table.Fields.Where(m => ArchiveVersionRepository.ExcludeField(m) == false))
+            foreach (var field in table.Fields.Where(m => ArchiveVersionRepository.ExcludeField(m, fieldFilters) == false))
             {
                 var columnElement = AddElement(columnsElement, "column");
                 AddElement(columnElement, "name", MakeSqlIdentifier(field.NameTarget));

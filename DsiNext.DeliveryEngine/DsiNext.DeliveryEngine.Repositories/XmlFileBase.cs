@@ -15,8 +15,6 @@ namespace DsiNext.DeliveryEngine.Repositories
 {
     public abstract class XmlFileBase
     {
-        private readonly FileInfo _path;
-        private readonly FileIndex _fileIndex;
         private XmlSchema _schema;
 
         #region Member Variables
@@ -32,8 +30,8 @@ namespace DsiNext.DeliveryEngine.Repositories
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (fileIndex == null && (this is FileIndex == false)) throw new ArgumentNullException(nameof(fileIndex));
 
-            _path = path;
-            _fileIndex = fileIndex;
+            FilePath = path;
+            FileIndex = fileIndex;
 
             InitDocument();
         }
@@ -46,8 +44,8 @@ namespace DsiNext.DeliveryEngine.Repositories
             if (namespaceLocation == null) throw new ArgumentNullException(nameof(namespaceLocation));
             if (fileIndex == null && (this is FileIndex == false)) throw new ArgumentNullException(nameof(fileIndex));
 
-            _path = path;
-            _fileIndex = fileIndex;
+            FilePath = path;
+            FileIndex = fileIndex;
             Namespace = @namespace;
             NamespaceLocation = namespaceLocation;
 
@@ -73,7 +71,11 @@ namespace DsiNext.DeliveryEngine.Repositories
             Root.SetAttributeNode(schemaLocation);
         }
 
-        protected XmlDocument Document { get; private set; }
+        protected FileInfo FilePath { get; }
+
+        protected FileIndex FileIndex { get; }
+
+        protected XmlDocument Document { get; set; }
 
         protected XmlElement Root => Document.DocumentElement;
 
@@ -159,7 +161,7 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         #endregion
 
-        public string Content()
+        public virtual string Content()
         {
             var result = String.Empty;
 
@@ -173,13 +175,13 @@ namespace DsiNext.DeliveryEngine.Repositories
             return result;
         }
 
-        public void Persist()
+        public virtual void Persist(object syncRoot = null)
         {
             Validate();
 
             try
             {
-                using (var filestream = new FileStream(_path.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (var filestream = new FileStream(FilePath.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     using (var xmlwriter = new XmlTextWriter(filestream, Encoding.UTF8))
                     {
@@ -187,18 +189,18 @@ namespace DsiNext.DeliveryEngine.Repositories
                         Document.WriteTo(xmlwriter);
                     }
                 }
-                _path.Refresh();
+                FilePath.Refresh();
             }
             catch (Exception ex)
             {
-                throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.FileWriteError, _path.FullName), ex);
+                throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.FileWriteError, FilePath.FullName), ex);
             }
 
             if (this is FileIndex)
             {
                 return;
             }
-            _fileIndex.AddFile(_path);
+            FileIndex.AddFile(FilePath);
         }
 
         protected virtual void Validate()

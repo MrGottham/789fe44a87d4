@@ -16,6 +16,6 @@ namespace DsiNext.DeliveryEngine.Repositories.Interfaces
 
         void ArchiveMetaData();
 
-        void ArchiveTableData(IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>> tableData);
+        void ArchiveTableData(IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>> tableData, object syncRoot);
     }
 }

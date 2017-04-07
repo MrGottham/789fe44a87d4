@@ -292,7 +292,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -367,7 +367,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -450,7 +450,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -524,7 +524,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -609,7 +609,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -728,7 +728,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[4].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(5));
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything), opt => opt.Repeat.Times(5));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
@@ -860,7 +860,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything)); 
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull)); 
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(2));
 
@@ -1005,7 +1005,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             foreignKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[3]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             foreignKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[4]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything), opt => opt.Repeat.Times(5)); 
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5)); 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy));
@@ -1146,7 +1146,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionInfoMock.AssertWasCalled(m => m.ConvertObjectData);
 
@@ -1288,7 +1288,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionInfoMock.AssertWasCalled(m => m.MappingObjectData);
 
@@ -1430,7 +1430,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionInfoMock.AssertWasCalled(m => m.ValidateObjectData);
 
@@ -1566,7 +1566,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasCalled(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy), opt => opt.Repeat.Times(2));
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
@@ -1713,7 +1713,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             foreignKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(2));
 
@@ -1835,7 +1835,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[4].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(5));
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull), opt => opt.Repeat.Times(5));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
@@ -1968,7 +1968,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(1));
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<object>.Is.NotNull));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(2));
 
@@ -2089,7 +2089,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[4].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(5));
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
@@ -2152,7 +2152,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
 
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(1));
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }

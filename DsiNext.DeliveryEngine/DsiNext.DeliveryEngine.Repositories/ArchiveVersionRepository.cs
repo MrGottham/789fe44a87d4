@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +30,7 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         public ArchiveVersionRepository(DirectoryInfo path)
         {
-            if (path == null) throw new ArgumentNullException("path");
+            if (path == null) throw new ArgumentNullException(nameof(path));
             if (!path.Exists) throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.DirectoryNotFound, path.FullName));
 
             DestinationFolder = path;
@@ -39,7 +40,7 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         #endregion
 
-        public DirectoryInfo DestinationFolder { get; private set; }
+        public DirectoryInfo DestinationFolder { get; }
 
         public IDataSource DataSource
         {
@@ -50,7 +51,7 @@ namespace DsiNext.DeliveryEngine.Repositories
             }
             set
             {
-                if (value == null) throw new ArgumentNullException("DataSource" + "");
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 if (_dataSource != null) throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.DataSourceAlreadySet));
 
                 _dataSource = value;
@@ -59,12 +60,17 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         #region TableData
 
-        public void ArchiveTableData(IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>> tableData)
+        public void ArchiveTableData(IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>> tableData, object syncRoot)
         {
             if (tableData == null)
             {
-                throw new ArgumentNullException("tableData");
+                throw new ArgumentNullException(nameof(tableData));
             }
+            if (syncRoot == null)
+            {
+                throw new ArgumentNullException(nameof(syncRoot));
+            }
+
             try
             {
                 CreateDirectory(TablesFolder);
@@ -77,27 +83,36 @@ namespace DsiNext.DeliveryEngine.Repositories
 
                     var table = data.Key;
                     Tuple<int, FileInfo, TableXsd> tableParams;
-                    if (_tableCache.TryGetValue(table, out tableParams) == false)
+                    lock (syncRoot)
                     {
-                        var tableNo = _tableCache.Count + 1;
-                        // Create the table folder.
-                        var tableFolder = String.Format(@"{0}\table{1}", TablesFolder, tableNo);
-                        CreateDirectory(tableFolder);
-                        // Create file information for table data file.
-                        var tableXmlFileInfo = new FileInfo(String.Format(@"{0}\table{1}.xml", tableFolder, tableNo));
-                        // Create the XML schema for the table.
-                        var tableXsdFileInfo = new FileInfo(String.Format(@"{0}\table{1}.xsd", tableFolder, tableNo));
-                        var tableXsd = ArchiveTableXsd(tableXsdFileInfo, table, tableNo);
-                        // Append to cache.
-                        _tableCache.Add(table, new Tuple<int, FileInfo, TableXsd>(tableNo, tableXmlFileInfo, tableXsd));
-                        tableParams = _tableCache[table];
+                        if (_tableCache.TryGetValue(table, out tableParams) == false)
+                        {
+                            var tableNo = _tableCache.Count + 1;
+                            // Create the table folder.
+                            var tableFolder = $@"{TablesFolder}\table{tableNo}";
+                            CreateDirectory(tableFolder);
+                            // Create file information for table data file.
+                            var tableXmlFileInfo = new FileInfo($@"{tableFolder}\table{tableNo}.xml");
+                            // Create the XML schema for the table.
+                            var tableXsdFileInfo = new FileInfo($@"{tableFolder}\table{tableNo}.xsd");
+                            var tableXsd = ArchiveTableXsd(tableXsdFileInfo, table, tableNo);
+                            // Append to cache.
+                            _tableCache.Add(table, new Tuple<int, FileInfo, TableXsd>(tableNo, tableXmlFileInfo, tableXsd));
+                            tableParams = _tableCache[table];
+                        }
                     }
 
-                    var rowCount = ArchiveTableXml(tableParams.Item2, tableParams.Item3, data.Value, tableParams.Item1);
-                    _tableIndex.AddTable(table, String.Format("table{0}", tableParams.Item1), rowCount);
+                    var rowCount = ArchiveTableXml(tableParams.Item2, tableParams.Item3, table, data.Value, tableParams.Item1, syncRoot);
+                    lock (syncRoot)
+                    {
+                        _tableIndex.AddTable(table, $"table{tableParams.Item1}", rowCount);
+                    }
                 }
-                _tableIndex.Persist();
-                _fileIndex.Persist();
+                lock (syncRoot)
+                {
+                    _tableIndex.Persist();
+                    _fileIndex.Persist();
+                }
             }
             catch (TargetInvocationException ex)
             {
@@ -121,22 +136,24 @@ namespace DsiNext.DeliveryEngine.Repositories
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (table == null)
             {
-                throw new ArgumentNullException("table");
+                throw new ArgumentNullException(nameof(table));
             }
             if (tableNo < 1)
             {
                 throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.IllegalValue, tableNo, "tableNo"));
             }
 
+            ReadOnlyObservableCollection<IFilter> fieldFilters = table.FieldFilters;
+
             var columnId = 1;
             var xsd = new TableXsd(table, tableNo, path, _fileIndex);
-            foreach (var field in table.Fields.Where(m => ExcludeField(m) == false))
+            foreach (var field in table.Fields.Where(m => ExcludeField(m, fieldFilters) == false))
             {
-                field.ColumnId = string.Format("c{0}", columnId++);
+                field.ColumnId = $"c{columnId++}";
                 xsd.AddColumn(field.ColumnId, field.DatatypeOfTarget, field.Nullable);
             }
 
@@ -144,44 +161,56 @@ namespace DsiNext.DeliveryEngine.Repositories
             return xsd;
         }
 
-        private int ArchiveTableXml(FileInfo path, TableXsd tableXsd, IEnumerable<IEnumerable<IDataObjectBase>> dataRows, int tableNo)
+        private int ArchiveTableXml(FileInfo path, TableXsd tableXsd, ITable table, IEnumerable<IEnumerable<IDataObjectBase>> dataRows, int tableNo, object syncRoot)
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
             if (tableXsd == null)
             {
-                throw new ArgumentNullException("tableXsd");
+                throw new ArgumentNullException(nameof(tableXsd));
             }
             if (dataRows == null)
             {
-                throw new ArgumentNullException("dataRows");
+                throw new ArgumentNullException(nameof(dataRows));
+            }
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
             }
             if (tableNo < 1)
             {
                 throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.IllegalValue, tableNo, "tableNo"));
             }
-
-            var tableXml = path.Exists ? TableXml.Load(tableXsd, path, _fileIndex, tableNo) : new TableXml(tableXsd, path, _fileIndex, tableNo);
-
-            var rowCount = 0;
-            foreach (var dataRow in dataRows)
+            if (syncRoot == null)
             {
-                tableXml.AddRow();
-                foreach (var dataObject in dataRow.Where(m => ExcludeField(m.Field) == false))
-                {
-                    var genericMethodForValue = dataObject.GetType()
-                                                          .GetMethod("GetTargetValue", new Type[] {})
-                                                          .MakeGenericMethod(dataObject.Field.DatatypeOfTarget);
-                    var value = genericMethodForValue.Invoke(dataObject, null);
-                    tableXml.AddField(dataObject.Field.ColumnId, value);
-                }
-                rowCount++;
+                throw new ArgumentNullException(nameof(syncRoot));
             }
-            
-            tableXml.Persist();
-            return rowCount;
+
+            ReadOnlyObservableCollection<IFilter> fieldFilters = table.FieldFilters;
+            using (var tableXml = new TableXml(tableXsd, path, _fileIndex, tableNo))
+            {
+                var rowCount = 0;
+                foreach (var dataRow in dataRows)
+                {
+                    tableXml.AddRow();
+                    foreach (var dataObject in dataRow.Where(m => ExcludeField(m.Field, fieldFilters) == false))
+                    {
+                        var genericMethodForValue = dataObject.GetType()
+                            .GetMethod("GetTargetValue", new Type[] { })
+                            .MakeGenericMethod(dataObject.Field.DatatypeOfTarget);
+                        var value = genericMethodForValue.Invoke(dataObject, null);
+                        tableXml.AddField(dataObject.Field.ColumnId, value);
+                    }
+                    tableXml.CloseRow();
+                    rowCount++;
+                }
+
+                tableXml.Persist(syncRoot);
+
+                return rowCount;
+            }
         }
 
         #endregion
@@ -192,12 +221,12 @@ namespace DsiNext.DeliveryEngine.Repositories
         {
             try
             {
-                foreach (var directory in DestinationFolder.GetDirectories(string.Format("{0}.*", DataSource.ArchiveInformationPackageId)))
+                foreach (var directory in DestinationFolder.GetDirectories($"{DataSource.ArchiveInformationPackageId}.*"))
                 {
                     directory.Delete(true);
                 }
 
-                var fileIndexPath = new FileInfo(String.Format(@"{0}\{1}", IndicesFolder, "fileIndex.xml"));
+                var fileIndexPath = new FileInfo($@"{IndicesFolder}\{"fileIndex.xml"}");
                 _fileIndex = new FileIndex(fileIndexPath, DestinationFolder);
 
                 CreateNewMedia();
@@ -223,11 +252,11 @@ namespace DsiNext.DeliveryEngine.Repositories
             Directory.CreateDirectory(SchemasFolder);
             Directory.CreateDirectory(SchemasStandardFolder);
 
-            ArchiveEmbededResource("Schemas.standard.archiveIndex.xsd", new FileInfo(String.Format(@"{0}\{1}", SchemasStandardFolder, "archiveIndex.xsd")));
-            ArchiveEmbededResource("Schemas.standard.contextDocumentationIndex.xsd", new FileInfo(String.Format(@"{0}\{1}", SchemasStandardFolder, "contextDocumentationIndex.xsd")));
-            ArchiveEmbededResource("Schemas.standard.fileIndex.xsd", new FileInfo(String.Format(@"{0}\{1}", SchemasStandardFolder, "fileIndex.xsd")));
-            ArchiveEmbededResource("Schemas.standard.tableIndex.xsd", new FileInfo(String.Format(@"{0}\{1}", SchemasStandardFolder, "tableIndex.xsd")));
-            ArchiveEmbededResource("Schemas.standard.XMLSchema.xsd", new FileInfo(String.Format(@"{0}\{1}", SchemasStandardFolder, "XMLSchema.xsd")));
+            ArchiveEmbededResource("Schemas.standard.archiveIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"archiveIndex.xsd"}"));
+            ArchiveEmbededResource("Schemas.standard.contextDocumentationIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"contextDocumentationIndex.xsd"}"));
+            ArchiveEmbededResource("Schemas.standard.fileIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"fileIndex.xsd"}"));
+            ArchiveEmbededResource("Schemas.standard.tableIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"tableIndex.xsd"}"));
+            ArchiveEmbededResource("Schemas.standard.XMLSchema.xsd", new FileInfo($@"{SchemasStandardFolder}\{"XMLSchema.xsd"}"));
         }
 
         private void ArchiveLocalSchemas()
@@ -241,15 +270,15 @@ namespace DsiNext.DeliveryEngine.Repositories
         {
             CreateDirectory(IndicesFolder);
 
-            var archiveIndexPath = new FileInfo(String.Format(@"{0}\{1}", IndicesFolder, "archiveIndex.xml"));
+            var archiveIndexPath = new FileInfo($@"{IndicesFolder}\{"archiveIndex.xml"}");
             var archiveIndex = new ArchiveIndex(DataSource, archiveIndexPath, _fileIndex);
             archiveIndex.Persist();
 
-            var contextDocumentationIndexPath = new FileInfo(String.Format(@"{0}\{1}", IndicesFolder, "contextDocumentationIndex.xml"));
+            var contextDocumentationIndexPath = new FileInfo($@"{IndicesFolder}\{"contextDocumentationIndex.xml"}");
             var contextDocumentationIndex = new ContextDocumentationIndex(DataSource.ContextDocuments, contextDocumentationIndexPath, _fileIndex);
             contextDocumentationIndex.Persist();
 
-            var tableIndexPath = new FileInfo(String.Format(@"{0}\{1}", IndicesFolder, "tableIndex.xml"));
+            var tableIndexPath = new FileInfo($@"{IndicesFolder}\{"tableIndex.xml"}");
             _tableIndex = new TableIndex(DataSource, tableIndexPath, _fileIndex);
             _tableIndex.Persist();
 
@@ -271,10 +300,10 @@ namespace DsiNext.DeliveryEngine.Repositories
                 if (contextDocumentCount % 10000 == 1)
                 {
                     docCollectionCount++;
-                    CreateDirectory(String.Format(@"{0}\docCollection{1}", ContextDocumentationFolder, docCollectionCount));
+                    CreateDirectory($@"{ContextDocumentationFolder}\docCollection{docCollectionCount}");
                 }
 
-                CreateDirectory(String.Format(@"{0}\docCollection{1}\{2}", ContextDocumentationFolder, docCollectionCount, contextDocument.Id));
+                CreateDirectory($@"{ContextDocumentationFolder}\docCollection{docCollectionCount}\{contextDocument.Id}");
 
                 var path = contextDocument.Reference;
 
@@ -294,7 +323,7 @@ namespace DsiNext.DeliveryEngine.Repositories
                         fileCount.Add(extension, 0);
                     fileCount[extension]++;
 
-                    var destination = String.Format(@"{0}\docCollection{1}\{2}\{3}{4}", ContextDocumentationFolder, docCollectionCount, contextDocument.Id, fileCount[extension], extension);
+                    var destination = $@"{ContextDocumentationFolder}\docCollection{docCollectionCount}\{contextDocument.Id}\{fileCount[extension]}{extension}";
                     try
                     {
                         File.Copy(file, destination, true);
@@ -311,12 +340,12 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         private void ArchiveEmbededResource(string resourceName, FileInfo file)
         {
-            if (resourceName == null) throw new ArgumentNullException("resourceName");
-            if (file == null) throw new ArgumentNullException("file");
+            if (resourceName == null) throw new ArgumentNullException(nameof(resourceName));
+            if (file == null) throw new ArgumentNullException(nameof(file));
 
             var assembly = GetType().Assembly;
             var assemblyName = assembly.GetName().Name;
-            using (var resourceStream = assembly.GetManifestResourceStream(string.Format("{0}.{1}", assemblyName, resourceName)))
+            using (var resourceStream = assembly.GetManifestResourceStream($"{assemblyName}.{resourceName}"))
             {
                 if (resourceStream == null) throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.ResourceNotFound, resourceName));
 
@@ -344,18 +373,17 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         #endregion
 
-        public static bool ExcludeField(IField field)
+        public static bool ExcludeField(IField field, ReadOnlyObservableCollection<IFilter> fieldFilters)
         {
             if (field == null)
             {
-                throw new ArgumentNullException("field");
+                throw new ArgumentNullException(nameof(field));
             }
-            var table = field.Table;
-            if (table == null)
+            if (fieldFilters == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(fieldFilters));
             }
-            return table.FieldFilters.Count > 0 && table.FieldFilters.Any(m => m.Exclude(field));
+            return fieldFilters.Count > 0 && fieldFilters.Any(m => m.Exclude(field));
         }
 
         private void CreateNewMedia()
@@ -371,7 +399,7 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         private static void CreateDirectory(string directory)
         {
-            if (directory == null) throw new ArgumentNullException("directory");
+            if (directory == null) throw new ArgumentNullException(nameof(directory));
 
             try
             {
@@ -387,16 +415,16 @@ namespace DsiNext.DeliveryEngine.Repositories
         {
             if (mediaNumber < 1) throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.IllegalValue, mediaNumber, "mediaNumber"));
 
-            return String.Format(@"{0}\{1}.{2}", DestinationFolder, DataSource.ArchiveInformationPackageId, mediaNumber);
+            return $@"{DestinationFolder}\{DataSource.ArchiveInformationPackageId}.{mediaNumber}";
         }
 
-        private string IndicesFolder { get { return String.Format(@"{0}\{1}", MediaFolderPath(1), "Indices"); } }
+        private string IndicesFolder => $@"{MediaFolderPath(1)}\{"Indices"}";
 
-        private string TablesFolder { get { return String.Format(@"{0}\{1}", MediaFolderPath(1), "Tables"); } }
-        private string ContextDocumentationFolder { get { return String.Format(@"{0}\{1}", MediaFolderPath(1), "ContextDocumentation"); } }
-        private string SchemasFolder { get { return String.Format(@"{0}\{1}", MediaFolderPath(1), "Schemas"); } }
-        private string SchemasStandardFolder { get { return String.Format(@"{0}\{1}", SchemasFolder, "standard"); } }
-        private string SchemasLocalSharedFolder { get { return String.Format(@"{0}\{1}", SchemasFolder, "localShared"); } }
+        private string TablesFolder => $@"{MediaFolderPath(1)}\{"Tables"}";
+        private string ContextDocumentationFolder => $@"{MediaFolderPath(1)}\{"ContextDocumentation"}";
+        private string SchemasFolder => $@"{MediaFolderPath(1)}\{"Schemas"}";
+        private string SchemasStandardFolder => $@"{SchemasFolder}\{"standard"}";
+        private string SchemasLocalSharedFolder => $@"{SchemasFolder}\{"localShared"}";
         //private string DocumentsFolder { get { return String.Format(@"{0}\{1}", MediaFolderPath(1), "Documents"); } }
     }
 }

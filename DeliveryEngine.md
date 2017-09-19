@@ -6,7 +6,7 @@ Sourcekoden til afleveringsmotoren kan hentes på [GitHub](https://github.com/Mr
 ## Kørsel af DeliveryEngine
 Syntaks: DsiNext.DeliveryEngine.Gui.ArchiveMaker.exe [/ArchiveInformationPackageID:[ID]] [/ValidationOnly:[true | false]] [/TablesHandledSimultaneity:[Antal]] [/AcceptWarnings:Antal]] [/RemoveMissingRelationshipsOnForeignKeys:[true | false]] [/NumberOfForeignTablesToCache:[Antal]]
 
-- ArchiveInformationPackageID (påkrævet) angiver ID for den arkivinformationspakke, der skal dannes, eksempelvis XXX
+- ArchiveInformationPackageID (påkrævet) angiver ID for den arkivinformationspakke, der skal dannes, eksempelvis AVID.SA.#####.#
 - ValidationOnly (optionel) der med værdien true angiver, at der kun udføres validering
 - TablesHandledSimultaneity (optinel) angiver, hvor mange tabeller, der skal dannes arkiv for samtidig
 - AcceptWarnings (optionel) angiver antallet af advasler før dannelse af arkiveringen fejler

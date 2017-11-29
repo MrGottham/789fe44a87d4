@@ -125,7 +125,10 @@ namespace DsiNext.DeliveryEngine.Repositories
             if (skipNullOrWhiteSpace && String.IsNullOrWhiteSpace(value)) return null;
 
             var element = Document.CreateElement(name, Namespace);
-            element.InnerText = value;
+            if (string.IsNullOrWhiteSpace(value) == false)
+            {
+                element.InnerText = value;
+            }
             parent.AppendChild(element);
 
             return element;

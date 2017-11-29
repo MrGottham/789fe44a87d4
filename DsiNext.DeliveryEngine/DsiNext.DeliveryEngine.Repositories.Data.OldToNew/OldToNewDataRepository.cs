@@ -304,7 +304,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Data.OldToNew
                         var buffer = new char[field.LengthOfSource];
                         var readed = streamReader.Read(buffer, 0, field.LengthOfSource);
                         var value = new string(buffer, 0, readed).Trim();
-                        if (field.Nullable && string.IsNullOrEmpty(value) && fieldDataType.IsValueType == false)
+                        if (field.Nullable && string.IsNullOrWhiteSpace(value) && fieldDataType.IsValueType == false)
                         {
                             columns.Add(CreateEmptyFieldData(fieldDataType, field));
                             continue;
@@ -323,7 +323,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Data.OldToNew
                         var buffer = new char[field.LengthOfSource];
                         var readed = streamReader.Read(buffer, 0, field.LengthOfSource);
                         var stringValue = new string(buffer, 0, readed).Trim();
-                        if (field.Nullable && string.IsNullOrEmpty(stringValue) && fieldDataType.IsValueType == false)
+                        if (field.Nullable && string.IsNullOrWhiteSpace(stringValue) && fieldDataType.IsValueType == false)
                         {
                             columns.Add(CreateEmptyFieldData(fieldDataType, field));
                             continue;
@@ -343,7 +343,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Data.OldToNew
                         var buffer = new char[field.LengthOfSource];
                         var readed = streamReader.Read(buffer, 0, field.LengthOfSource);
                         var stringValue = new string(buffer, 0, readed).Trim();
-                        if (field.Nullable && string.IsNullOrEmpty(stringValue) && fieldDataType.IsValueType == false)
+                        if (field.Nullable && string.IsNullOrWhiteSpace(stringValue) && fieldDataType.IsValueType == false)
                         {
                             columns.Add(CreateEmptyFieldData(fieldDataType, field));
                             continue;
@@ -363,7 +363,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Data.OldToNew
                         var buffer = new char[field.LengthOfSource];
                         var readed = streamReader.Read(buffer, 0, field.LengthOfSource);
                         var stringValue = new string(buffer, 0, readed).Trim();
-                        if (field.Nullable && string.IsNullOrEmpty(stringValue) && fieldDataType.IsValueType == false)
+                        if (field.Nullable && string.IsNullOrWhiteSpace(stringValue) && fieldDataType.IsValueType == false)
                         {
                             columns.Add(CreateEmptyFieldData(fieldDataType, field));
                             continue;
@@ -387,7 +387,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Data.OldToNew
                         var buffer = new char[field.LengthOfSource];
                         var readed = streamReader.Read(buffer, 0, field.LengthOfSource);
                         var stringValue = new string(buffer, 0, readed).Trim();
-                        if (field.Nullable && string.IsNullOrEmpty(stringValue) && fieldDataType.IsValueType == false)
+                        if (field.Nullable && string.IsNullOrWhiteSpace(stringValue) && fieldDataType.IsValueType == false)
                         {
                             columns.Add(CreateEmptyFieldData(fieldDataType, field));
                             continue;
@@ -407,7 +407,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Data.OldToNew
                         var buffer = new char[field.LengthOfSource];
                         var readed = streamReader.Read(buffer, 0, field.LengthOfSource);
                         var stringValue = new string(buffer, 0, readed).Trim();
-                        if (field.Nullable && string.IsNullOrEmpty(stringValue))
+                        if (field.Nullable && string.IsNullOrWhiteSpace(stringValue) && fieldDataType.IsValueType == false)
                         {
                             columns.Add(CreateEmptyFieldData(fieldDataType, field));
                             continue;

@@ -176,7 +176,11 @@ namespace DsiNext.DeliveryEngine.Repositories.Tables
             _xmlTextWriter.WriteStartElement(string.Empty, columnId, Namespace);
             if (value != null)
             {
-                _xmlTextWriter.WriteString(XmlValue(value));
+                string xmlValue = XmlValue(value);
+                if (string.IsNullOrWhiteSpace(xmlValue) == false)
+                {
+                    _xmlTextWriter.WriteString(xmlValue);
+                }
                 _xmlTextWriter.WriteEndElement();
                 return;
             }

@@ -5,5 +5,9 @@
     /// </summary>
     public interface IConfigurationRepository : IRepository
     {
+        /// <summary>
+        /// Gets whether empty tables should be included in the delivery.
+        /// </summary>
+        bool IncludeEmptyTables { get; }
     }
 }

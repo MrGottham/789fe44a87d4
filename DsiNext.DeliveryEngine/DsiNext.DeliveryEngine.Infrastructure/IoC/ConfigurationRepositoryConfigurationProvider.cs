@@ -1,4 +1,5 @@
-﻿using Castle.Windsor;
+﻿using System.Configuration;
+using Castle.Windsor;
 using Castle.MicroKernel.Registration;
 using DsiNext.DeliveryEngine.Infrastructure.Interfaces.IoC;
 using DsiNext.DeliveryEngine.Repositories.Configuration;
@@ -19,7 +20,9 @@ namespace DsiNext.DeliveryEngine.Infrastructure.IoC
         /// <param name="container">Container for Inversion of Control.</param>
         public void AddConfiguration(IWindsorContainer container)
         {
-            container.Register(Component.For<IConfigurationRepository>().ImplementedBy<ConfigurationRepository>().LifeStyle.PerThread);
+            IConfigurationRepository configurationRepository = new ConfigurationRepository(ConfigurationManager.AppSettings);
+
+            container.Register(Component.For<IConfigurationRepository>().Instance(configurationRepository).LifeStyle.Singleton);
         }
 
         #endregion

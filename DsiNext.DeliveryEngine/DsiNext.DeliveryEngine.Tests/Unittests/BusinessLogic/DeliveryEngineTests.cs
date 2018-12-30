@@ -269,13 +269,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand();
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -290,9 +284,10 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasNotCalled(m => m.Table);
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -343,13 +338,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(fixture.CreateAnonymous<string>())
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(fixture.CreateAnonymous<string>());
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -365,9 +354,10 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasNotCalled(m => m.Table);
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -426,13 +416,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
                     eventCalled = true;
                 };
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand();
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -448,9 +432,10 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasNotCalled(m => m.Table);
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -501,13 +486,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand();
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -522,9 +501,10 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasNotCalled(m => m.Table);
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -585,13 +565,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
                     eventCalled = true;
                 };
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand();
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -607,9 +581,10 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasNotCalled(m => m.Table);
             executeCommand.AssertWasNotCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
         }
@@ -692,19 +667,8 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            bool includeEmptyTables = fixture.CreateAnonymous<bool>();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(includeEmptyTables: includeEmptyTables);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -720,6 +684,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasCalled(m => m.IncludeEmptyTables, opt => opt.Repeat.Times(5));
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[1].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
@@ -728,7 +693,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[4].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(5));
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Equal(includeEmptyTables), Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
@@ -827,19 +792,8 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
                 };
             // ReSharper restore ImplicitlyCapturedClosure
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            bool includeEmptyTables = fixture.CreateAnonymous<bool>();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(includeEmptyTables: includeEmptyTables);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -856,11 +810,12 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasCalled(m => m.IncludeEmptyTables, opt => opt.Repeat.Once());
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator());
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull)); 
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Equal(includeEmptyTables), Arg<object>.Is.NotNull)); 
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(2));
 
@@ -957,19 +912,8 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            bool includeEmptyTables = fixture.CreateAnonymous<bool>();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(includeEmptyTables: includeEmptyTables);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -985,6 +929,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasCalled(m => m.IncludeEmptyTables, opt => opt.Repeat.Times(5));
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[1].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
@@ -1005,7 +950,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             foreignKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[3]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             foreignKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[4]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5)); 
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Equal(includeEmptyTables), Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5)); 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy));
@@ -1013,7 +958,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
         }
 
         /// <summary>
-        /// Test that Execute retry to validate data for a targettable if an DeliveryEngineConvertException occurs.
+        /// Test that Execute retry to validate data for a target table if an DeliveryEngineConvertException occurs.
         /// </summary>
         [Test]
         public void TestThatExecuteRetryToValidateDataForTargetTableIfDeliveryEngineConvertExceptionOccurs()
@@ -1110,19 +1055,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(true)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(validationOnly: true);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -1130,6 +1063,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             metadataRepositoryMock.AssertWasCalled(m => m.DataSourceGet());
             executeCommand.AssertWasCalled(m => m.OverrideArchiveInformationPackageId);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             // ReSharper disable ImplicitlyCapturedClosure
             archiveVersionRepositoryMock.AssertWasCalled(m => m.DataSource = Arg<IDataSource>.Is.Equal(dataSourceMock));
             // ReSharper restore ImplicitlyCapturedClosure
@@ -1146,7 +1080,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionInfoMock.AssertWasCalled(m => m.ConvertObjectData);
 
@@ -1155,7 +1089,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
         }
 
         /// <summary>
-        /// Test that Execute retry to validate data for a targettable if an DeliveryEngineMappingException occurs.
+        /// Test that Execute retry to validate data for a target table if an DeliveryEngineMappingException occurs.
         /// </summary>
         [Test]
         public void TestThatExecuteRetryToValidateDataForTargetTableIfDeliveryEngineMappingExceptionOccurs()
@@ -1252,19 +1186,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(true)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(validationOnly: true);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -1281,6 +1203,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
@@ -1288,7 +1211,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionInfoMock.AssertWasCalled(m => m.MappingObjectData);
 
@@ -1297,7 +1220,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
         }
 
         /// <summary>
-        /// Test that Execute retry to validate data for a targettable if an DeliveryEngineValidateException occurs.
+        /// Test that Execute retry to validate data for a target table if an DeliveryEngineValidateException occurs.
         /// </summary>
         [Test]
         public void TestThatExecuteRetryToValidateDataForTargetTableIfDeliveryEngineValidateExceptionOccurs()
@@ -1394,19 +1317,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(true)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(validationOnly: true);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -1423,6 +1334,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
@@ -1430,7 +1342,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionInfoMock.AssertWasCalled(m => m.ValidateObjectData);
 
@@ -1439,7 +1351,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
         }
 
         /// <summary>
-        /// Test that Execute retry to validate data for a targettable if an Exception occurs.
+        /// Test that Execute retry to validate data for a target table if an Exception occurs.
         /// </summary>
         [Test]
         public void TestThatExecuteRetryToValidateDataForTargetTableIfExceptionOccurs()
@@ -1530,19 +1442,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(true)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(validationOnly: true);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -1559,6 +1459,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
@@ -1566,7 +1467,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             // ReSharper disable ImplicitlyCapturedClosure
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull), opt => opt.Repeat.Times(2));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasCalled(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy), opt => opt.Repeat.Times(2));
             exceptionHandlerMock.AssertWasNotCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
@@ -1676,19 +1577,8 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
                 };
             // ReSharper restore ImplicitlyCapturedClosure
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            bool includeEmptyTables = fixture.CreateAnonymous<bool>();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(includeEmptyTables: includeEmptyTables);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -1705,6 +1595,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasCalled(m => m.IncludeEmptyTables, opt => opt.Repeat.Once());
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
@@ -1713,7 +1604,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             primaryKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             foreignKeyDataValidatorMock.AssertWasCalled(m => m.Validate(Arg<ITable>.Is.Equal(dataSourceMock.Tables[0]), Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(true), Arg<ICommand>.Is.NotNull));
             // ReSharper restore ImplicitlyCapturedClosure
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.NotNull));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Equal(includeEmptyTables), Arg<object>.Is.NotNull));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(2));
 
@@ -1799,19 +1690,8 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            bool includeEmptyTables = fixture.CreateAnonymous<bool>();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(includeEmptyTables: includeEmptyTables);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -1827,6 +1707,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasCalled(m => m.IncludeEmptyTables, opt => opt.Repeat.Times(5));
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[1].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
@@ -1835,7 +1716,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[4].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(5));
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(includeEmptyTables), Arg<object>.Is.NotNull), opt => opt.Repeat.Times(5));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
@@ -1935,19 +1816,8 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
                 };
             // ReSharper restore ImplicitlyCapturedClosure
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(false)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            bool includeEmptyTables = fixture.CreateAnonymous<bool>();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(includeEmptyTables: includeEmptyTables);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -1964,11 +1834,12 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasCalled(m => m.IncludeEmptyTables, opt => opt.Repeat.Once());
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(1));
-            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<object>.Is.NotNull));
+            archiveVersionRepositoryMock.AssertWasCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.NotNull, Arg<bool>.Is.Equal(includeEmptyTables), Arg<object>.Is.NotNull));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(2));
 
@@ -2053,19 +1924,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(fixture.CreateAnonymous<IConfigurationRepository>(), fixture.CreateAnonymous<IMetadataRepository>(), fixture.CreateAnonymous<IDataRepository>(), fixture.CreateAnonymous<IDocumentRepository>(), fixture.CreateAnonymous<IDataValidators>(), archiveVersionRepositoryMock, fixture.CreateAnonymous<IExceptionHandler>());
             Assert.That(deliveryEngine, Is.Not.Null);
 
-            var executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
-            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.ValidationOnly)
-                          .Return(true)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.Table)
-                          .Return(null)
-                          .Repeat.Any();
-            executeCommand.Expect(m => m.TablesHandledSimultaneity)
-                          .Return(5)
-                          .Repeat.Any();
+            IDeliveryEngineExecuteCommand executeCommand = BuildDeliveryEngineExecuteCommand(validationOnly: true);
             fixture.Customize<IDeliveryEngineExecuteCommand>(e => e.FromFactory(() => executeCommand));
 
             deliveryEngine.Execute(fixture.CreateAnonymous<IDeliveryEngineExecuteCommand>());
@@ -2081,6 +1940,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataSourceMock.AssertWasCalled(m => m.Tables);
             executeCommand.AssertWasCalled(m => m.Table);
             executeCommand.AssertWasCalled(m => m.TablesHandledSimultaneity);
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables, opt => opt.Repeat.Once());
             // ReSharper disable ImplicitlyCapturedClosure
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[0].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[1].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
@@ -2089,7 +1949,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             dataRepositoryMock.AssertWasCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Equal(dataSourceMock.Tables[4].NameTarget), Arg<IDataSource>.Is.Equal(dataSourceMock)));
             // ReSharper restore ImplicitlyCapturedClosure
             dataValidatorsMock.AssertWasCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(5));
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             executeCommand.AssertWasCalled(m => m.ValidationOnly, opt => opt.Repeat.Times(6));
 
@@ -2150,11 +2010,38 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic
             executeCommand.AssertWasNotCalled(m => m.ValidationOnly);
             archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveMetaData());
 
+            executeCommand.AssertWasNotCalled(m => m.IncludeEmptyTables);
+
             dataRepositoryMock.AssertWasNotCalled(m => m.DataGetForTargetTable(Arg<string>.Is.Anything, Arg<IDataSource>.Is.Anything));
             dataValidatorsMock.AssertWasNotCalled(m => m.GetEnumerator(), opt => opt.Repeat.Times(1));
-            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<object>.Is.Anything));
+            archiveVersionRepositoryMock.AssertWasNotCalled(m => m.ArchiveTableData(Arg<IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>>>.Is.Anything, Arg<bool>.Is.Anything, Arg<object>.Is.Anything));
 
             exceptionHandlerMock.AssertWasCalled(m => m.HandleException(Arg<Exception>.Is.NotNull));
+        }
+
+        /// <summary>
+        /// Build an instance which implements <see cref="IDeliveryEngineExecuteCommand"/> and can be used for unit testing.
+        /// </summary>
+        /// <returns>Instance which implements <see cref="IDeliveryEngineExecuteCommand"/> and can be used for unit testing.</returns>
+        private IDeliveryEngineExecuteCommand BuildDeliveryEngineExecuteCommand(string overrideArchiveInformationPackageId = null, bool validationOnly = false, string table = null, int tablesHandledSimultaneity = 5, bool includeEmptyTables = false)
+        {
+            IDeliveryEngineExecuteCommand executeCommand = MockRepository.GenerateMock<IDeliveryEngineExecuteCommand>();
+            executeCommand.Expect(m => m.OverrideArchiveInformationPackageId)
+                .Return(overrideArchiveInformationPackageId)
+                .Repeat.Any();
+            executeCommand.Expect(m => m.ValidationOnly)
+                .Return(validationOnly)
+                .Repeat.Any();
+            executeCommand.Expect(m => m.Table)
+                .Return(table)
+                .Repeat.Any();
+            executeCommand.Expect(m => m.TablesHandledSimultaneity)
+                .Return(tablesHandledSimultaneity)
+                .Repeat.Any();
+            executeCommand.Stub(m => m.IncludeEmptyTables)
+                .Return(includeEmptyTables)
+                .Repeat.Any();
+            return executeCommand;
         }
     }
 }

@@ -60,7 +60,7 @@ namespace DsiNext.DeliveryEngine.Repositories
 
         #region TableData
 
-        public void ArchiveTableData(IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>> tableData, object syncRoot)
+        public void ArchiveTableData(IDictionary<ITable, IEnumerable<IEnumerable<IDataObjectBase>>> tableData, bool includeEmptyTables, object syncRoot)
         {
             if (tableData == null)
             {
@@ -76,7 +76,7 @@ namespace DsiNext.DeliveryEngine.Repositories
                 CreateDirectory(TablesFolder);
                 foreach (var data in tableData)
                 {
-                    if (data.Value.Any() == false)
+                    if (data.Value.Any() == false && includeEmptyTables == false)
                     {
                         continue;
                     }
@@ -252,11 +252,11 @@ namespace DsiNext.DeliveryEngine.Repositories
             Directory.CreateDirectory(SchemasFolder);
             Directory.CreateDirectory(SchemasStandardFolder);
 
-            ArchiveEmbededResource("Schemas.standard.archiveIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"archiveIndex.xsd"}"));
-            ArchiveEmbededResource("Schemas.standard.contextDocumentationIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"contextDocumentationIndex.xsd"}"));
-            ArchiveEmbededResource("Schemas.standard.fileIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"fileIndex.xsd"}"));
-            ArchiveEmbededResource("Schemas.standard.tableIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"tableIndex.xsd"}"));
-            ArchiveEmbededResource("Schemas.standard.XMLSchema.xsd", new FileInfo($@"{SchemasStandardFolder}\{"XMLSchema.xsd"}"));
+            ArchiveEmbeddedResource("Schemas.standard.archiveIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"archiveIndex.xsd"}"));
+            ArchiveEmbeddedResource("Schemas.standard.contextDocumentationIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"contextDocumentationIndex.xsd"}"));
+            ArchiveEmbeddedResource("Schemas.standard.fileIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"fileIndex.xsd"}"));
+            ArchiveEmbeddedResource("Schemas.standard.tableIndex.xsd", new FileInfo($@"{SchemasStandardFolder}\{"tableIndex.xsd"}"));
+            ArchiveEmbeddedResource("Schemas.standard.XMLSchema.xsd", new FileInfo($@"{SchemasStandardFolder}\{"XMLSchema.xsd"}"));
         }
 
         private void ArchiveLocalSchemas()
@@ -338,7 +338,7 @@ namespace DsiNext.DeliveryEngine.Repositories
             }
         }
 
-        private void ArchiveEmbededResource(string resourceName, FileInfo file)
+        private void ArchiveEmbeddedResource(string resourceName, FileInfo file)
         {
             if (resourceName == null) throw new ArgumentNullException(nameof(resourceName));
             if (file == null) throw new ArgumentNullException(nameof(file));

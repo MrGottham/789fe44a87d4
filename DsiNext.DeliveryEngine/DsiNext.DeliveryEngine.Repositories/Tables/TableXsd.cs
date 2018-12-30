@@ -57,7 +57,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Tables
             var row = new XmlSchemaElement
             {
                 Name = "row",
-                MinOccurs = 1,
+                MinOccurs = 0,
                 MaxOccursString = "unbounded",
                 SchemaTypeName = new XmlQualifiedName(rowType.Name)
             };

@@ -8,15 +8,20 @@ using System.Linq;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Domstolene.JFS.CommonLibrary.IoC.Interfaces;
+using Domstolene.JFS.CommonLibrary.IoC.Interfaces.Windsor;
 using DsiNext.DeliveryEngine.BusinessLogic.Commands;
 using DsiNext.DeliveryEngine.BusinessLogic.DataValidators;
+using DsiNext.DeliveryEngine.BusinessLogic.Interfaces;
+using DsiNext.DeliveryEngine.BusinessLogic.Interfaces.Commands;
 using DsiNext.DeliveryEngine.BusinessLogic.Interfaces.DataValidators;
+using DsiNext.DeliveryEngine.Domain.Interfaces.Metadata;
 using DsiNext.DeliveryEngine.Infrastructure.ExceptionHandling;
 using DsiNext.DeliveryEngine.Infrastructure.Interfaces.ExceptionHandling;
 using DsiNext.DeliveryEngine.Infrastructure.Interfaces.Exceptions;
 using DsiNext.DeliveryEngine.Infrastructure.Interfaces.Log;
 using DsiNext.DeliveryEngine.Infrastructure.IoC;
 using DsiNext.DeliveryEngine.Repositories;
+using DsiNext.DeliveryEngine.Repositories.Configuration;
 using DsiNext.DeliveryEngine.Repositories.Data.Oracle;
 using DsiNext.DeliveryEngine.Repositories.DataManipulators;
 using DsiNext.DeliveryEngine.Repositories.Interfaces;
@@ -28,7 +33,6 @@ using Rhino.Mocks;
 
 namespace DsiNext.DeliveryEngine.Tests.Integrationtests.BusinessLogic
 {
-
     /// <summary>
     /// Integration tests of business logic in the delivery engine with an oracle data repository.
     /// </summary>
@@ -42,122 +46,84 @@ namespace DsiNext.DeliveryEngine.Tests.Integrationtests.BusinessLogic
         [Test]
         public void TestValidation()
         {
-            var containerMock = MockRepository.GenerateMock<IContainer>();
-            var informationLoggerMock = MockRepository.GenerateMock<IInformationLogger>();
-            informationLoggerMock.Expect(m => m.LogInformation(Arg<string>.Is.NotNull))
-                                 .WhenCalled(e => Debug.WriteLine(e.Arguments.ElementAt(0)))
-                                 .Repeat.Any();
-            informationLoggerMock.Expect(m => m.LogWarning(Arg<string>.Is.NotNull))
-                                 .WhenCalled(e => Debug.WriteLine(e.Arguments.ElementAt(0)))
-                                 .Repeat.Any();
-
-            var warnings = 0;
-            var exceptionHandlerMock = MockRepository.GenerateMock<IExceptionHandler>();
+            int warnings = 0;
+            IExceptionHandler exceptionHandlerMock = MockRepository.GenerateMock<IExceptionHandler>();
             exceptionHandlerMock.OnException += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.Exception, Is.Not.Null);
-                    throw eventArgs.Exception;
-                };
-            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy))
-                                .WhenCalled(e =>
-                                    {
-                                        var validationException = e.Arguments.ElementAt(0) as DeliveryEngineValidateException;
-                                        if (validationException != null)
-                                        {
-                                            Debug.WriteLine("{0}: {1}", "WARNING", validationException.Message);
-                                            warnings++;
-                                            e.Arguments[1] = warnings < 25;
-                                            return;
-                                        }
-                                        var mappingException = e.Arguments.ElementAt(0) as DeliveryEngineMappingException;
-                                        if (mappingException != null)
-                                        {
-                                            Debug.WriteLine("{0}: {1}", "WARNING", mappingException.Message);
-                                            warnings++;
-                                            e.Arguments[1] = warnings < 25;
-                                            return;
-                                        }
-                                        var exception = (Exception) e.Arguments.ElementAt(0);
-                                        Debug.WriteLine(exception);
-                                        e.Arguments[1] = false;
-                                        exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock, new HandleExceptionEventArgs(exception));
-                                    })
-                                .Repeat.Any();
-            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull))
-                                .WhenCalled(e =>
-                                    {
-                                        var exception = (Exception) e.Arguments.ElementAt(0);
-                                        Debug.WriteLine(exception.InnerException.Message);
-                                        Debug.WriteLine(exception.InnerException.StackTrace);
-                                        exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock, new HandleExceptionEventArgs(exception));
-                                    })
-                                .Repeat.Any();
-
-            var configurationRepositoryMock = MockRepository.GenerateMock<IConfigurationRepository>();
-            var metadataRepository = new OldToNewMetadataRepository(RepositoryTestHelper.GetSourcePathForOracleTest(), new ConfigurationValues());
-            containerMock.Expect(m => m.Resolve<IMetadataRepository>())
-                         .Return(metadataRepository)
-                         .Repeat.Any();
-            ICollection<IDataManipulator> dataMainpulatorCollection;
-            using (var windsorContainer = new WindsorContainer())
             {
-                windsorContainer.Register(Component.For<IContainer>().Instance(containerMock).LifeStyle.Transient);
-                windsorContainer.Register(Component.For<IInformationLogger>().Instance(informationLoggerMock).LifeStyle.Transient);
-                windsorContainer.Register(Component.For<IMetadataRepository>().Instance(metadataRepository).LifeStyle.Transient);
-                var dataManipulatorsConfigurationProvider = new DataManipulatorsConfigurationProvider();
-                dataManipulatorsConfigurationProvider.AddConfiguration(windsorContainer);
-                dataMainpulatorCollection = windsorContainer.ResolveAll<IDataManipulator>();
-                windsorContainer.Dispose();
-            }
-            containerMock.Expect(m => m.ResolveAll<IDataManipulator>())
-                         .Return(dataMainpulatorCollection.ToArray())
-                         .Repeat.Any();
-            var dataRepository = new OracleDataRepository(new OracleClientFactory(), new DataManipulators(containerMock));
-            containerMock.Expect(m => m.Resolve<IDataRepository>())
-                         .Return(dataRepository)
-                         .Repeat.Any();
-            var documentRepositoryMock = MockRepository.GenerateMock<IDocumentRepository>();
-            var archiveRepository = new ArchiveVersionRepository(new DirectoryInfo(ConfigurationManager.AppSettings["ArchivePath"]));
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Exception, Is.Not.Null);
+                throw eventArgs.Exception;
+            };
+            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy))
+                .WhenCalled(e =>
+                {
+                    if (e.Arguments.ElementAt(0) is DeliveryEngineValidateException validationException)
+                    {
+                        Debug.WriteLine("{0}: {1}", "WARNING", validationException.Message);
+                        warnings++;
+                        e.Arguments[1] = warnings < 25;
+                        return;
+                    }
 
-            containerMock.Expect(m => m.ResolveAll<IDataValidator>())
-                         .Return(new Collection<IDataValidator> {new PrimaryKeyDataValidator(dataRepository), new ForeignKeysDataValidator(dataRepository), new MappingDataValidator()}.ToArray())
-                         .Repeat.Any();
-            var dataValidators = new DataValidators(containerMock);
+                    if (e.Arguments.ElementAt(0) is DeliveryEngineMappingException mappingException)
+                    {
+                        Debug.WriteLine("{0}: {1}", "WARNING", mappingException.Message);
+                        warnings++;
+                        e.Arguments[1] = warnings < 25;
+                        return;
+                    }
 
-            var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(configurationRepositoryMock, metadataRepository, dataRepository, documentRepositoryMock, dataValidators, archiveRepository, exceptionHandlerMock);
+                    Exception exception = (Exception) e.Arguments.ElementAt(0);
+                    Debug.WriteLine(exception);
+                    e.Arguments[1] = false;
+                    exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock, new HandleExceptionEventArgs(exception));
+                })
+                .Repeat.Any();
+            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull))
+                .WhenCalled(e =>
+                {
+                    Exception exception = (Exception) e.Arguments.ElementAt(0);
+                    Debug.WriteLine(exception.Message);
+                    Debug.WriteLine(exception.StackTrace);
+                    exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock, new HandleExceptionEventArgs(exception));
+                })
+                .Repeat.Any();
+
+            IDeliveryEngine deliveryEngine = CreateSut(true, exceptionHandlerMock);
             Assert.That(deliveryEngine, Is.Not.Null);
 
             deliveryEngine.BeforeGetDataSource += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Debug.WriteLine("Getting the data source. Please wait...");
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Debug.WriteLine("Getting the data source. Please wait...");
+            };
             deliveryEngine.BeforeGetDataForTargetTable += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.DataSource, Is.Not.Null);
-                    Assert.That(eventArgs.TargetTable, Is.Not.Null);
-                    Debug.WriteLine("Getting data for the table named '{0}' (reading data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.DataSource, Is.Not.Null);
+                Assert.That(eventArgs.TargetTable, Is.Not.Null);
+                Debug.WriteLine("Getting data for the table named '{0}' (reading data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
+            };
             deliveryEngine.BeforeValidateDataInTargetTable += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.DataSource, Is.Not.Null);
-                    Assert.That(eventArgs.TargetTable, Is.Not.Null);
-                    Debug.WriteLine("Validating data from table named '{0}' (validating data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.DataSource, Is.Not.Null);
+                Assert.That(eventArgs.TargetTable, Is.Not.Null);
+                Debug.WriteLine("Validating data from table named '{0}' (validating data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
+            };
 
-            var command = new DeliveryEngineExecuteCommand
-                {
-                    OverrideArchiveInformationPackageId = "AVID.SA.12549",
-                    ValidationOnly = true,
-                    TablesHandledSimultaneity = 3
-                };
+            IConfigurationRepository configurationRepository = new ConfigurationRepository(ConfigurationManager.AppSettings);
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand
+            {
+                OverrideArchiveInformationPackageId = "AVID.SA.12549",
+                ValidationOnly = true,
+                TablesHandledSimultaneity = 3,
+                IncludeEmptyTables = configurationRepository.IncludeEmptyTables
+            };
             deliveryEngine.Execute(command);
         }
 
@@ -167,118 +133,82 @@ namespace DsiNext.DeliveryEngine.Tests.Integrationtests.BusinessLogic
         [Test]
         public void TestArchivation()
         {
-            var containerMock = MockRepository.GenerateMock<IContainer>();
-            var informationLoggerMock = MockRepository.GenerateMock<IInformationLogger>();
-            informationLoggerMock.Expect(m => m.LogInformation(Arg<string>.Is.NotNull))
-                                 .WhenCalled(e => Debug.WriteLine(e.Arguments.ElementAt(0)))
-                                 .Repeat.Any();
-            informationLoggerMock.Expect(m => m.LogWarning(Arg<string>.Is.NotNull))
-                                 .WhenCalled(e => Debug.WriteLine(e.Arguments.ElementAt(0)))
-                                 .Repeat.Any();
-            var exceptionHandlerMock = MockRepository.GenerateMock<IExceptionHandler>();
+            IExceptionHandler exceptionHandlerMock = MockRepository.GenerateMock<IExceptionHandler>();
             exceptionHandlerMock.OnException += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.Exception, Is.Not.Null);
-                    throw eventArgs.Exception;
-                };
-            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy))
-                                .WhenCalled(e =>
-                                    {
-                                        var exception = (Exception) e.Arguments.ElementAt(0);
-                                        Debug.WriteLine(exception);
-                                        e.Arguments[1] = false;
-                                        exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock, new HandleExceptionEventArgs(exception));
-                                    })
-                                .Repeat.Any();
-            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull))
-                                .WhenCalled(e =>
-                                    {
-                                        var exception = (Exception) e.Arguments.ElementAt(0);
-                                        Debug.WriteLine(exception);
-                                        exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock, new HandleExceptionEventArgs(exception));
-                                    })
-                                .Repeat.Any();
-
-            var configurationRepositoryMock = MockRepository.GenerateMock<IConfigurationRepository>();
-            var metadataRepository = new OldToNewMetadataRepository(RepositoryTestHelper.GetSourcePathForOracleTest(), new ConfigurationValues());
-            containerMock.Expect(m => m.Resolve<IMetadataRepository>())
-                         .Return(metadataRepository)
-                         .Repeat.Any();
-            ICollection<IDataManipulator> dataMainpulatorCollection;
-            using (var windsorContainer = new WindsorContainer())
             {
-                windsorContainer.Register(Component.For<IContainer>().Instance(containerMock).LifeStyle.Transient);
-                windsorContainer.Register(Component.For<IInformationLogger>().Instance(informationLoggerMock).LifeStyle.Transient);
-                windsorContainer.Register(Component.For<IMetadataRepository>().Instance(metadataRepository).LifeStyle.Transient);
-                var dataManipulatorsConfigurationProvider = new DataManipulatorsConfigurationProvider();
-                dataManipulatorsConfigurationProvider.AddConfiguration(windsorContainer);
-                dataMainpulatorCollection = windsorContainer.ResolveAll<IDataManipulator>();
-                windsorContainer.Dispose();
-            }
-            containerMock.Expect(m => m.ResolveAll<IDataManipulator>())
-                         .Return(dataMainpulatorCollection.ToArray())
-                         .Repeat.Any();
-            var dataRepository = new OracleDataRepository(new OracleClientFactory(), new DataManipulators(containerMock));
-            containerMock.Expect(m => m.Resolve<IDataRepository>())
-                         .Return(dataRepository)
-                         .Repeat.Any();
-            var documentRepositoryMock = MockRepository.GenerateMock<IDocumentRepository>();
-            var archiveRepository = new ArchiveVersionRepository(new DirectoryInfo(ConfigurationManager.AppSettings["ArchivePath"]));
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.Exception, Is.Not.Null);
+                throw eventArgs.Exception;
+            };
+            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull, out Arg<bool>.Out(true).Dummy))
+                .WhenCalled(e =>
+                {
+                    Exception exception = (Exception) e.Arguments.ElementAt(0);
+                    Debug.WriteLine(exception);
+                    e.Arguments[1] = false;
+                    exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock, new HandleExceptionEventArgs(exception));
+                })
+                .Repeat.Any();
+            exceptionHandlerMock.Expect(m => m.HandleException(Arg<Exception>.Is.NotNull))
+                .WhenCalled(e =>
+                {
+                    Exception exception = (Exception) e.Arguments.ElementAt(0);
+                    Debug.WriteLine(exception);
+                    exceptionHandlerMock.Raise(f => f.OnException += null, exceptionHandlerMock,
+                        new HandleExceptionEventArgs(exception));
+                })
+                .Repeat.Any();
 
-            containerMock.Expect(m => m.ResolveAll<IDataValidator>())
-                         .Return(new Collection<IDataValidator>().ToArray())
-                         .Repeat.Any();
-            var dataValidators = new DataValidators(containerMock);
-
-            var deliveryEngine = new DeliveryEngine.BusinessLogic.DeliveryEngine(configurationRepositoryMock, metadataRepository, dataRepository, documentRepositoryMock, dataValidators, archiveRepository, exceptionHandlerMock);
+            IDeliveryEngine deliveryEngine = CreateSut(false, exceptionHandlerMock);
             Assert.That(deliveryEngine, Is.Not.Null);
 
             deliveryEngine.BeforeGetDataSource += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Debug.WriteLine("Getting the data source. Please wait...");
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Debug.WriteLine("Getting the data source. Please wait...");
+            };
             deliveryEngine.BeforeArchiveMetadata += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.DataSource, Is.Not.Null);
-                    Debug.WriteLine("Archive metadata for '{0}{1}'. Please wait...", eventArgs.DataSource.NameTarget, string.Empty);
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.DataSource, Is.Not.Null);
+                Debug.WriteLine("Archive metadata for '{0}{1}'. Please wait...", eventArgs.DataSource.NameTarget, string.Empty);
+            };
             deliveryEngine.BeforeGetDataForTargetTable += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.DataSource, Is.Not.Null);
-                    Assert.That(eventArgs.TargetTable, Is.Not.Null);
-                    Debug.WriteLine("Getting data for the table named '{0}' (reading data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.DataSource, Is.Not.Null);
+                Assert.That(eventArgs.TargetTable, Is.Not.Null);
+                Debug.WriteLine("Getting data for the table named '{0}' (reading data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
+            };
             deliveryEngine.BeforeValidateDataInTargetTable += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.DataSource, Is.Not.Null);
-                    Assert.That(eventArgs.TargetTable, Is.Not.Null);
-                    Debug.WriteLine("Validating data from table named '{0}' (validating data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.DataSource, Is.Not.Null);
+                Assert.That(eventArgs.TargetTable, Is.Not.Null);
+                Debug.WriteLine("Validating data from table named '{0}' (validating data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
+            };
             deliveryEngine.BeforeArchiveDataForTargetTable += (sender, eventArgs) =>
-                {
-                    Assert.That(sender, Is.Not.Null);
-                    Assert.That(eventArgs, Is.Not.Null);
-                    Assert.That(eventArgs.DataSource, Is.Not.Null);
-                    Assert.That(eventArgs.TargetTable, Is.Not.Null);
-                    Debug.WriteLine("Writing data from the table named '{0}' (writing data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
-                };
+            {
+                Assert.That(sender, Is.Not.Null);
+                Assert.That(eventArgs, Is.Not.Null);
+                Assert.That(eventArgs.DataSource, Is.Not.Null);
+                Assert.That(eventArgs.TargetTable, Is.Not.Null);
+                Debug.WriteLine("Writing data from the table named '{0}' (writing data from block {1}). Please wait...", eventArgs.TargetTable.NameTarget, eventArgs.DataBlock);
+            };
 
-            var command = new DeliveryEngineExecuteCommand
-                {
-                    OverrideArchiveInformationPackageId = "AVID.SA.12549",
-                    ValidationOnly = false,
-                    TablesHandledSimultaneity = 3
-                };
+            IConfigurationRepository configurationRepository = new ConfigurationRepository(ConfigurationManager.AppSettings);
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand
+            {
+                OverrideArchiveInformationPackageId = "AVID.SA.12549",
+                ValidationOnly = false,
+                TablesHandledSimultaneity = 3,
+                IncludeEmptyTables = configurationRepository.IncludeEmptyTables
+            };
             deliveryEngine.Execute(command);
         }
 
@@ -288,20 +218,75 @@ namespace DsiNext.DeliveryEngine.Tests.Integrationtests.BusinessLogic
         [Test]
         public void Test()
         {
-            var metadataRepository = new OldToNewMetadataRepository(RepositoryTestHelper.GetSourcePathForOracleTest(), new ConfigurationValues());
-            var dataSource = metadataRepository.DataSourceGet();
-            foreach (var contextDocument in dataSource.ContextDocuments)
+            IMetadataRepository metadataRepository = new OldToNewMetadataRepository(RepositoryTestHelper.GetSourcePathForOracleTest(), new ConfigurationValues());
+            IDataSource dataSource = metadataRepository.DataSourceGet();
+            foreach (IContextDocument contextDocument in dataSource.ContextDocuments)
             {
                 Debug.WriteLine(contextDocument.NameTarget);
             }
             Debug.WriteLine(string.Empty);
             Debug.WriteLine(string.Empty);
-            foreach (var view in dataSource.Views)
+            foreach (IView view in dataSource.Views)
             {
                 Debug.WriteLine(view.Description);
                 Debug.WriteLine(view.SqlQuery);
                 Debug.WriteLine(string.Empty);
             }
+        }
+
+        private IDeliveryEngine CreateSut(bool useDataValidators, IExceptionHandler exceptionHandler)
+        {
+            if (exceptionHandler == null)
+            {
+                throw new ArgumentNullException(nameof(exceptionHandler));
+            }
+
+            IContainer containerMock = MockRepository.GenerateMock<IContainer>();
+
+            IInformationLogger informationLoggerMock = MockRepository.GenerateMock<IInformationLogger>();
+            informationLoggerMock.Expect(m => m.LogInformation(Arg<string>.Is.NotNull))
+                .WhenCalled(e => Debug.WriteLine(e.Arguments.ElementAt(0)))
+                .Repeat.Any();
+            informationLoggerMock.Expect(m => m.LogWarning(Arg<string>.Is.NotNull))
+                .WhenCalled(e => Debug.WriteLine(e.Arguments.ElementAt(0)))
+                .Repeat.Any();
+
+            IConfigurationRepository configurationRepositoryMock = MockRepository.GenerateMock<IConfigurationRepository>();
+            IMetadataRepository metadataRepository = new OldToNewMetadataRepository(RepositoryTestHelper.GetSourcePathForOracleTest(), new ConfigurationValues());
+            containerMock.Expect(m => m.Resolve<IMetadataRepository>())
+                .Return(metadataRepository)
+                .Repeat.Any();
+
+            ICollection<IDataManipulator> dataManipulatorCollection;
+            using (var windsorContainer = new WindsorContainer())
+            {
+                windsorContainer.Register(Component.For<IContainer>().Instance(containerMock).LifeStyle.Transient);
+                windsorContainer.Register(Component.For<IInformationLogger>().Instance(informationLoggerMock).LifeStyle.Transient);
+                windsorContainer.Register(Component.For<IMetadataRepository>().Instance(metadataRepository).LifeStyle.Transient);
+
+                IConfigurationProvider dataManipulatorsConfigurationProvider = new DataManipulatorsConfigurationProvider();
+                dataManipulatorsConfigurationProvider.AddConfiguration(windsorContainer);
+
+                dataManipulatorCollection = windsorContainer.ResolveAll<IDataManipulator>();
+                windsorContainer.Dispose();
+            }
+            containerMock.Expect(m => m.ResolveAll<IDataManipulator>())
+                .Return(dataManipulatorCollection.ToArray())
+                .Repeat.Any();
+            IDataRepository dataRepository = new OracleDataRepository(new OracleClientFactory(), new DataManipulators(containerMock));
+            containerMock.Expect(m => m.Resolve<IDataRepository>())
+                .Return(dataRepository)
+                .Repeat.Any();
+            IDocumentRepository documentRepositoryMock = MockRepository.GenerateMock<IDocumentRepository>();
+            IArchiveVersionRepository archiveRepository = new ArchiveVersionRepository(new DirectoryInfo(ConfigurationManager.AppSettings["ArchivePath"]));
+
+            ICollection<IDataValidator> dataValidatorCollection = useDataValidators ? new Collection<IDataValidator> {new PrimaryKeyDataValidator(dataRepository), new ForeignKeysDataValidator(dataRepository), new MappingDataValidator()} : new Collection<IDataValidator>();
+            containerMock.Expect(m => m.ResolveAll<IDataValidator>())
+                .Return(dataValidatorCollection.ToArray())
+                .Repeat.Any();
+            IDataValidators dataValidators = new DataValidators(containerMock);
+
+            return new DeliveryEngine.BusinessLogic.DeliveryEngine(configurationRepositoryMock, metadataRepository, dataRepository, documentRepositoryMock, dataValidators, archiveRepository, exceptionHandler);
         }
     }
 }

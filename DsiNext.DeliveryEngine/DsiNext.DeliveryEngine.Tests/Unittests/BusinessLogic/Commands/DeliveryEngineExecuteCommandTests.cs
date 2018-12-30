@@ -1,4 +1,5 @@
 ﻿using DsiNext.DeliveryEngine.BusinessLogic.Commands;
+using DsiNext.DeliveryEngine.BusinessLogic.Interfaces.Commands;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 
@@ -10,13 +11,28 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
     [TestFixture]
     public class DeliveryEngineExecuteCommandTests
     {
+        #region Private variables
+
+        private Fixture _fixture;
+
+        #endregion
+
+        /// <summary>
+        /// Setup each unit test.
+        /// </summary>
+        [SetUp]
+        public void SetUp()
+        {
+            _fixture = new Fixture();
+        }
+
         /// <summary>
         /// Test that the constructor initialize the command executing the delivery engine.
         /// </summary>
         [Test]
         public void TestThatConstructorInitializeCommand()
         {
-            var command = new DeliveryEngineExecuteCommand();
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
             Assert.That(command, Is.Not.Null);
             Assert.That(command.OverrideArchiveInformationPackageId, Is.Null);
             Assert.That(command.ValidationOnly, Is.False);
@@ -24,6 +40,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
             Assert.That(command.TablesHandledSimultaneity, Is.EqualTo(5));
             Assert.That(command.RemoveMissingRelationshipsOnForeignKeys, Is.False);
             Assert.That(command.NumberOfForeignTablesToCache, Is.EqualTo(10));
+            Assert.That(command.IncludeEmptyTables, Is.False);
         }
 
         /// <summary>
@@ -32,13 +49,11 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
         [Test]
         public void TestThatOverrideArchiveInformationPackageIdSetterChangeValue()
         {
-            var fixture = new Fixture();
-
-            var command = new DeliveryEngineExecuteCommand();
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
             Assert.That(command, Is.Not.Null);
             Assert.That(command.OverrideArchiveInformationPackageId, Is.Null);
 
-            var newValue = fixture.CreateAnonymous<string>();
+            string newValue = _fixture.CreateAnonymous<string>();
             command.OverrideArchiveInformationPackageId = newValue;
             Assert.That(command.OverrideArchiveInformationPackageId, Is.Not.Null);
             Assert.That(command.OverrideArchiveInformationPackageId, Is.Not.Empty);
@@ -51,7 +66,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
         [Test]
         public void TestThatValidationOnlySetterChangeValue()
         {
-            var command = new DeliveryEngineExecuteCommand();
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
             Assert.That(command, Is.Not.Null);
             Assert.That(command.ValidationOnly, Is.False);
 
@@ -65,13 +80,11 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
         [Test]
         public void TestThatTableSetterChangeValue()
         {
-            var fixture = new Fixture();
-
-            var command = new DeliveryEngineExecuteCommand();
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
             Assert.That(command, Is.Not.Null);
             Assert.That(command.Table, Is.Null);
 
-            var newValue = fixture.CreateAnonymous<string>();
+            string newValue = _fixture.CreateAnonymous<string>();
             command.Table = newValue;
             Assert.That(command.Table, Is.Not.Null);
             Assert.That(command.Table, Is.Not.Empty);
@@ -84,13 +97,11 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
         [Test]
         public void TestThatTablesHandledSimultaneitySetterChangeValue()
         {
-            var fixture = new Fixture();
-
-            var command = new DeliveryEngineExecuteCommand();
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
             Assert.That(command, Is.Not.Null);
             Assert.That(command.TablesHandledSimultaneity, Is.EqualTo(5));
 
-            var newValue = command.TablesHandledSimultaneity + fixture.CreateAnonymous<int>();
+            var newValue = command.TablesHandledSimultaneity + _fixture.CreateAnonymous<int>();
             command.TablesHandledSimultaneity = newValue;
             Assert.That(command.TablesHandledSimultaneity, Is.EqualTo(newValue));
         }
@@ -101,7 +112,7 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
         [Test]
         public void TestThatRemoveMissingRelationshipsOnForeignKeysSetterChangeValue()
         {
-            var command = new DeliveryEngineExecuteCommand();
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
             Assert.That(command, Is.Not.Null);
             Assert.That(command.RemoveMissingRelationshipsOnForeignKeys, Is.False);
 
@@ -115,15 +126,27 @@ namespace DsiNext.DeliveryEngine.Tests.Unittests.BusinessLogic.Commands
         [Test]
         public void TestThatNumberOfForeignTablesToCacheSetterChangeValue()
         {
-            var fixture = new Fixture();
-
-            var command = new DeliveryEngineExecuteCommand();
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
             Assert.That(command, Is.Not.Null);
             Assert.That(command.NumberOfForeignTablesToCache, Is.EqualTo(10));
 
-            var newValue = command.NumberOfForeignTablesToCache + fixture.CreateAnonymous<int>();
+            var newValue = command.NumberOfForeignTablesToCache + _fixture.CreateAnonymous<int>();
             command.NumberOfForeignTablesToCache = newValue;
             Assert.That(command.NumberOfForeignTablesToCache, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Test that the setter of IncludeEmptyTables change the value.
+        /// </summary>
+        [Test]
+        public void TestThatIncludeEmptyTablesSetterChangeValue()
+        {
+            IDeliveryEngineExecuteCommand command = new DeliveryEngineExecuteCommand();
+            Assert.That(command, Is.Not.Null);
+            Assert.That(command.IncludeEmptyTables, Is.False);
+
+            command.IncludeEmptyTables = true;
+            Assert.That(command.IncludeEmptyTables, Is.True);
         }
     }
 }

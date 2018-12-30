@@ -174,7 +174,7 @@
     <value>Type</value>
   </data>
   <data name="UsageArchiveMaker" xml:space="preserve">
-    <value>Usage: {0} [/ArchiveInformationPackageID:[ID]] [/ValidationOnly:[true | false]] [/TablesHandledSimultaneity:[Number]] [/AcceptWarnings:[Number]] [/RemoveMissingRelationshipsOnForeignKeys:[true | false]] [/NumberOfForeignTablesToCache:[Number]]</value>
+    <value>Usage: {0} [/ArchiveInformationPackageID:[ID]] [/ValidationOnly:[true | false]] [/TablesHandledSimultaneity:[Number]] [/AcceptWarnings:[Number]] [/RemoveMissingRelationshipsOnForeignKeys:[true | false]] [/NumberOfForeignTablesToCache:[Number]] [/IncludeEmptyTables:[true | false]]</value>
     <comment>{0} = Name of program.</comment>
   </data>
   <data name="Warning" xml:space="preserve">

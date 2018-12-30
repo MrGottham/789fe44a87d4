@@ -86,7 +86,7 @@ namespace DsiNext.DeliveryEngine.Repositories.Indices
             {
                 throw new ArgumentNullException(nameof(tableFolder));
             }
-            if (rowCount < 1)
+            if (rowCount < 0)
             {
                 throw new DeliveryEngineRepositoryException(Resource.GetExceptionMessage(ExceptionMessage.IllegalValue, rowCount, "rowCount"));
             }

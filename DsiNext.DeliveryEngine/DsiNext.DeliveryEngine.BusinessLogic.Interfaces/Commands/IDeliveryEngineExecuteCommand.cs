@@ -8,37 +8,26 @@
         /// <summary>
         /// Value for overriding the unique package ID for the archive.
         /// </summary>
-        string OverrideArchiveInformationPackageId
-        {
-            get;
-            set;
-        }
+        string OverrideArchiveInformationPackageId { get; set; }
 
         /// <summary>
         /// Indicates whether just to validate data.
         /// </summary>
-        bool ValidationOnly
-        {
-            get;
-            set;
-        }
+        bool ValidationOnly { get; set; }
 
         /// <summary>
         /// Table name or regular expression for tables on which the delivery engine should be executed.
         /// </summary>
-        string Table
-        {
-            get;
-            set;
-        }
+        string Table { get; set; }
 
         /// <summary>
         /// Number of tables which the delivery engine should handle simultaneity.
         /// </summary>
-        int TablesHandledSimultaneity
-        {
-            get;
-            set;
-        }
+        int TablesHandledSimultaneity { get; set; }
+
+        /// <summary>
+        /// Indicates whether empty tables should be included in the delivery.
+        /// </summary>
+        bool IncludeEmptyTables { get; set; }
     }
 }
